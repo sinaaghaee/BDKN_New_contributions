@@ -1,0 +1,2 @@
+# Preserve the generated CSV download format on every platform.
+website/dist/**/*.csv text eol=crlf

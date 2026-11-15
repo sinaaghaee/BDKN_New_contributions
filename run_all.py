@@ -58,7 +58,7 @@ def comparison(output,data_path):
         ax.plot(x,pred['grid_mean'],label='Prediction')
         ax.plot(x,pred['f_grid'].reshape(-1),'k--',lw=1,label='True function')
         ax.scatter(train_x,train_y,s=8,c='black',alpha=.4,label='Training data')
-        ax.set(xlim=(-1,1),ylim=(lo-pad,hi+pad),xlabel='x',ylabel='y',
+        ax.set(xlim=(float(x.min()),float(x.max())),ylim=(lo-pad,hi+pad),xlabel='x',ylabel='y',
                title=f"{row['method']} | RMSE {row['rmse']:.4f} | NLL {row['nll']:.4f}")
         ax.legend(fontsize=6)
     for ax in list(axes.flat)[len(panels):]: ax.set_visible(False)
@@ -82,6 +82,8 @@ def main():
     if args.epochs is not None and args.epochs<1: parser.error('--epochs must be positive')
     data_path=resolve(args.data)
     if not data_path.exists():
+        if data_path!=resolve(DATA_PATH):
+            raise FileNotFoundError(f'Missing {data_path}. Generate the intended dataset with generate_data.py --dataset NAME --output PATH first.')
         subprocess.run([sys.executable,str(ROOT/'generate_data.py'),'--output',str(data_path)],check=True)
     output=resolve(args.output) if args.output else resolve(OUTPUT_ROOT)/datetime.now(timezone.utc).strftime('comparison_%Y%m%d_%H%M%S_%f')
     output.mkdir(parents=True,exist_ok=False)

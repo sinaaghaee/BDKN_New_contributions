@@ -29,6 +29,8 @@ NAMES = {
     'forde_ensemble': 'First-order repulsion · DE', 'forde': 'First-order repulsion · BDKN',
     'gp': 'GP', 'dkl': 'DKL', 'ldbll': 'LDBLL', 'vbll': 'VBLL',
 }
+_PLOT_CACHE = {}
+
 PAIRS = [('Original', 'deep_ensemble', 'bdkn'), ('Functional repulsion', 'frde_ensemble', 'frde'),
          ('Weight repulsion', 'wrde_ensemble', 'wrde'), ('First-order repulsion', 'forde_ensemble', 'forde')]
 # Visual tokens and report structure follow BDKN_Experiments/website.
@@ -95,7 +97,7 @@ def make_history_plots(records, method, save):
     return charts
 
 
-def build_run(run, output, registry, entry):
+def build_run(run, output, registry, entry, ui_only=False):
     failure_path=run/'failures.json'
     if not failure_path.exists() or json.loads(failure_path.read_text()):
         raise ValueError('Build the report only from a completed run with no failed methods')
@@ -115,6 +117,28 @@ def build_run(run, output, registry, entry):
     if set(predictions)!=set(NAMES): raise ValueError('Expected all 12 prediction results')
     rows.sort(key=lambda row:list(NAMES).index(row['method']))
     lookup={r['method']:r for r in rows}
+    if not np.isclose(configs['bdkn']['lr'],float(entry['learning_rate'])):
+        raise ValueError('Learning-rate label does not match saved BDKN configuration')
+    for method in ('frde','wrde','forde'):
+        if not np.isclose(configs[method]['repulsion_strength'],float(entry['repulsion'])):
+            raise ValueError('Repulsion label does not match saved configuration')
+    if ui_only:
+        manifest=json.loads((output/'report_manifest.json').read_text())
+        if manifest['dataset_sha256']!=expected or manifest['experiment_id']!=entry['id']:
+            raise ValueError('Existing plot manifest does not match profile; rebuild figures')
+        for key,digest in manifest.get('source_prediction_sha256',{}).items():
+            if hashlib.sha256((locations[key]/'predictions.npz').read_bytes()).hexdigest()!=digest:
+                raise ValueError('Saved fit changed; rebuild figures: '+key)
+        for key,digest in manifest.get('source_history_sha256',{}).items():
+            if hashlib.sha256((run/key/'history.csv').read_bytes()).hexdigest()!=digest:
+                raise ValueError('Saved history changed; rebuild figures: '+key)
+        context=dict(output=output,registry=registry,entry=entry,names=NAMES,pairs=PAIRS,rows=rows,
+                     configs=configs,data=data,predictions=predictions,histories=manifest['history_charts'],dataset_hash=expected,ui_only=True)
+        render_report(context)
+        (output/'style.css').write_text(CSS);(output/'report.js').write_text(JS.strip()+'\n')
+        shutil.copy2(ROOT/'provenance.json',output/'downloads/provenance.json')
+        print('Refreshed '+entry['id'],flush=True)
+        return expected
     assets=output/'assets'; downloads=output/'downloads'
     assets.mkdir(parents=True,exist_ok=True); downloads.mkdir(parents=True,exist_ok=True)
     shutil.copy2(run/'metrics.csv',downloads/'metrics.csv')
@@ -124,7 +148,7 @@ def build_run(run, output, registry, entry):
     clean_configs={key:{k:v for k,v in cfg.items() if k not in ('data_path','output_root','reuse_stage1')} for key,cfg in configs.items()}
     (downloads/'settings.json').write_text(json.dumps(clean_configs,indent=2)+'\n')
     (downloads/'metrics.json').write_text(json.dumps(rows,indent=2)+'\n')
-    (output/'style.css').write_text(CSS); (output/'report.js').write_text(JS)
+    (output/'style.css').write_text(CSS); (output/'report.js').write_text(JS.strip()+'\n')
     x=data['x_grid'].reshape(-1)
     lo=min(float(p['grid_lower'].min()) for p in predictions.values())
     hi=max(float(p['grid_upper'].max()) for p in predictions.values())
@@ -136,14 +160,33 @@ def build_run(run, output, registry, entry):
             ax.scatter(data['x_test'],data['y_test'],s=7,color='#b36a30',alpha=.32,label='Test observations',zorder=3)
         if observations in ('train','both'):
             ax.scatter(data['x_train'],data['y_train'],s=13,color='#172033',alpha=.55,label='Training observations',zorder=4)
-        ax.set(xlim=(-1,1),ylim=limits,xlabel='x',ylabel='y')
+        ax.set(xlim=(float(x.min()),float(x.max())),ylim=limits,xlabel='x',ylabel='y')
         ax.grid(alpha=.12)
     def draw(ax,name,color='#396ca9',label=None):
         pred=predictions[name]
         ax.fill_between(x,pred['grid_lower'],pred['grid_upper'],color=color,alpha=.17,label='95% predictive interval' if label is None else label+' · 95% interval')
         ax.plot(x,pred['grid_mean'],color=color,lw=1.7,label=label or 'Predictive mean')
+    prediction_hashes={key:hashlib.sha256((locations[key]/'predictions.npz').read_bytes()).hexdigest() for key in predictions}
+    history_hashes={key:hashlib.sha256((run/key/'history.csv').read_bytes()).hexdigest() for key in configs if (run/key/'history.csv').exists()}
     def save(fig,name):
-        fig.tight_layout();fig.savefig(assets/name,dpi=160,bbox_inches='tight');plt.close(fig)
+        # Repeated weight profiles share baseline plots and histories.
+        if name.startswith('data.'):signature=expected
+        elif 'history' in name:
+            method=next(key for key in sorted(history_hashes,key=len,reverse=True) if name.startswith(key+'_'));signature=history_hashes[method]
+        elif name.startswith('all_models'):signature=json.dumps(prediction_hashes,sort_keys=True)
+        elif '_pair' in name:
+            key=name.split('_pair')[0];signature=prediction_hashes[key]+prediction_hashes['deep_ensemble' if key=='bdkn' else key+'_ensemble']
+        elif name.startswith('metrics.'):signature=json.dumps(rows,sort_keys=True)
+        else:
+            key=next(key for key in sorted(predictions,key=len,reverse=True) if name.startswith(key+'.') or name.startswith(key+'_'))
+            signature=prediction_hashes[key]
+        cache_key=(expected,name,signature)
+        previous=_PLOT_CACHE.get(cache_key)
+        if previous and previous.is_file():shutil.copy2(previous,assets/name)
+        else:
+            fig.tight_layout();fig.savefig(assets/name,dpi=140,bbox_inches='tight')
+            _PLOT_CACHE[cache_key]=assets/name
+        plt.close(fig)
     # Pre-render observation layers so the switches also work without a server.
     for observations,suffix in (('train',''),('test','_test'),('both','_both'),('none','_none')):
         for name in NAMES:
@@ -172,12 +215,12 @@ def build_run(run, output, registry, entry):
         shutil.copy2(locations[name]/'predictions.npz',downloads/(name+'_predictions.npz'))
     fig,axes=plt.subplots(1,2,figsize=(12,4))
     axes[0].plot(x,data['f_grid'],'k',lw=1.3,label='True function')
-    axes[0].scatter(data['x_train'],data['y_train'],s=16,alpha=.65,label=f'{len(data["x_train"])} noisy training observations')
+    axes[0].scatter(data['x_train'],data['y_train'],s=16,alpha=.65,label=f'{len(data["x_train"])} training observations')
     axes[0].legend(fontsize=8);axes[0].set_title('Shared training dataset')
     axes[1].plot(x,data['f_grid'],'k',lw=1.3)
     axes[1].scatter(data['x_test'],data['y_test'],s=3,alpha=.25)
-    axes[1].set_title('Independent noisy test dataset')
-    for ax in axes: ax.set(xlabel='x',ylabel='y',xlim=(-1,1));ax.grid(alpha=.15)
+    axes[1].set_title('Independent test dataset')
+    for ax in axes: ax.set(xlabel='x',ylabel='y',xlim=(float(data['x_grid'].min()),float(data['x_grid'].max())));ax.grid(alpha=.15)
     save(fig,'data.png')
     fig,axes=plt.subplots(1,2,figsize=(13,6))
     for ax,metric in zip(axes,('rmse','nll')):
@@ -201,14 +244,30 @@ def build_run(run, output, registry, entry):
     context=dict(output=output,registry=registry,entry=entry,names=NAMES,pairs=PAIRS,
                  rows=rows,configs=configs,data=data,predictions=predictions,histories=history_figures,dataset_hash=expected)
     render_report(context)
-    (output/'report_manifest.json').write_text(json.dumps(dict(dataset_sha256=expected,methods=list(configs),predictions=list(NAMES),history_charts=history_figures,observation_modes=['train','test','both','none'],device=run_config['device'],experiment_id=entry['id'],generated_at=datetime.now(timezone.utc).isoformat()),indent=2)+'\n')
+    (output/'report_manifest.json').write_text(json.dumps(dict(dataset_sha256=expected,methods=list(configs),predictions=list(NAMES),history_charts=history_figures,observation_modes=['train','test','both','none'],device=run_config['device'],experiment_id=entry['id'],source_prediction_sha256=prediction_hashes,source_history_sha256=history_hashes,generated_at=datetime.now(timezone.utc).isoformat()),indent=2)+'\n')
     print(f'Built {entry["id"]}: {output}/index.html',flush=True)
     return expected
+
+
+def write_overview_download(output,registry):
+    combined=[]
+    for entry in registry['experiments']:
+        for folder in Path(entry['run']).iterdir():
+            if folder.is_dir() and (folder/'metrics.json').exists():
+                for row in json.loads((folder/'metrics.json').read_text()):
+                    cfg=json.loads((folder/'config.json').read_text())
+                    combined.append(dict(dataset=entry['dataset'],nn_learning_rate=entry['learning_rate'],method_learning_rate=cfg['lr'],epochs=cfg['epochs'],repulsion=entry['repulsion'],**row))
+    (output/'downloads').mkdir(exist_ok=True)
+    with (output/'downloads/all_results.csv').open('w',newline='') as handle:
+        writer=csv.DictWriter(handle,fieldnames=list(combined[0]));writer.writeheader();writer.writerows(combined)
 
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--registry',default=REGISTRY_PATH,help='Dataset, LR, strength, and completed-run registry')
+    parser.add_argument('--ui-only',action='store_true',help='Refresh tables, controls and equations using existing validated report figures')
+    parser.add_argument('--learning-rate',type=float,help='Render only this registered learning-rate setting')
+    parser.add_argument('--datasets',nargs='+',help='Render only these dataset IDs while retaining the full overview registry')
     parser.add_argument('--run',help='Build just the default dataset/profile using this completed run')
     parser.add_argument('--output',default=OUTPUT_PATH)
     args=parser.parse_args()
@@ -220,10 +279,13 @@ def main():
     shutil.copytree(ROOT/'website/vendor',output/'vendor',dirs_exist_ok=True)
     hashes={}
     for entry in registry['experiments']:
-        result=build_run(Path(entry['run']),output/entry['directory'],registry,entry)
+        if args.datasets and entry['dataset'] not in args.datasets:continue
+        if args.learning_rate is not None and float(entry['learning_rate'])!=args.learning_rate:continue
+        result=build_run(Path(entry['run']),output/entry['directory'],registry,entry,args.ui_only)
         previous=hashes.setdefault(entry['dataset'],result)
         if result!=previous:raise ValueError('Runs under one dataset label must use identical data')
-    deduplicate_assets(output,registry)
+    write_overview_download(output,registry)
+    if args.ui_only or not args.datasets:deduplicate_assets(output,registry)
     print(f'Website: {output}/index.html · {len(registry["experiments"])} experiments')
 
 

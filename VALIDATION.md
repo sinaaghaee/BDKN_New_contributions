@@ -28,10 +28,28 @@ BDKN_SOURCE_REPO=../BDKN_Experiments python -m unittest -v test_experiment
 python build_website.py
 ```
 
-Experiment selection is configured in `website/experiments.json`. The offline report is `website/dist/index.html`. The private hosted copy uses the same generated static source.
+Experiment selection is configured in `website/experiments.json`. The offline report is `website/dist/index.html`. Publication status is recorded separately below; rebuilding locally alone does not update the private hosted copy.
 
 Environment: Python 3.13; torch 2.11.0+cu126; NumPy 2.4.3; SciPy 1.17.1; matplotlib 3.10.8; scikit-learn 1.8.0; GPyTorch 1.15.2; VBLL 0.4.9. Source-specific settings and unequal budgets make this an illustrative comparison, not an equal-compute or repeated-seed benchmark.
 
-Latest verification: all 23 numerical/source/UI-unit checks passed. Executable report-JavaScript checks passed all observation modes, all loss-axis combinations, each real strength switch, nested-to-default navigation preserving the page, and synthetic future dataset/LR combinations. Every profile has 36 colored main-table cells and 90 colored strength-comparison cells, with no delta rows or summary cards. There are 16 individual loss charts plus 15 side-by-side repulsion-loss charts; both axes default to log. All five strengths completed with finite scores and positive measured training costs.
+Earlier five-profile verification: all 23 numerical/source/UI-unit checks passed. Executable report-JavaScript checks passed all observation modes, all loss-axis combinations, each real strength switch, nested-to-default navigation preserving the page, and synthetic future dataset/LR combinations. Every profile has 36 colored main-table cells and 90 colored strength-comparison cells, with no delta rows or summary cards. There are 16 individual loss charts plus 15 side-by-side repulsion-loss charts; both axes default to log. All five strengths completed with finite scores and positive measured training costs.
 
 Loss definitions are grouped by all nine methods with local KaTeX rendering and short symbol tables. All 52 LaTeX expressions rendered successfully. Button interactions passed every axis, observation, strength, and future dataset/LR navigation check. Full browser-layout rechecking remains unavailable as noted above.
+
+## Multi-dataset extension
+
+The suite adds nine source-derived scalar tasks to the existing step dataset: cubic, Forrester, He, amplitude-varying sine, linear+sinc, Fourier square wave, shifted sinc, sine, and cosine. Source training counts/patterns and active noise settings are retained. New observations use seed 123 and independent streams; the sine/cosine tasks share input coordinates but use independent noise. Each has 1,000 held-out observations uniformly sampled across the full plotting domain and a 2,000-point noiseless function grid. Shifted sinc is noiseless.
+
+All 81 two-epoch smoke executions passed on the two RTX 3090 GPUs. The numerical/source-parity and suite tests now contain 30 passing checks. Full runs retain 2,000 epochs, 10,000 for DKL/LDBLL, and 100 Bayesian aggregation steps. Non-repulsive fits are reused across five weight profiles, with original training costs preserved. All 45 added profiles completed successfully (189 successful standalone executions, including reused-DE evaluations). After the editor interruption, three incomplete cosine fits restarted from method boundaries; all other completed fits were preserved.
+
+The new Results page has separate RMSE, NLL, and training-time tables with dataset rows and twelve method columns. Colors rank methods within each row. The other pages retain dataset buttons, observation controls, logarithmic loss controls, side-by-side weight panels, and method-wise LaTeX definitions. Full browser-layout verification remains unavailable; executable JavaScript and saved-artifact checks cover the controls, links, values, and formulas.
+
+Final multi-dataset checks passed: 450 registered method artifacts with matching budgets/data/history/checkpoints; recomputed RMSE and NLL match every saved prediction; 400 HTML pages, 50 profiles, 600 metric rows, 6,220 unique plot assets, and 67 distinct LaTeX expressions. Executable JavaScript checks passed observation/axis/method controls, every real dataset/weight switch, and overview learning-rate selection across differing dataset availability. Publication was blocked by automatic approval review before the official Sites workflow started: explicit user authorization to send the report and derived project artifacts to the external hosting destination is required. The existing hosted site remains unchanged; the complete verified report is website/dist/index.html. No credential was sent to a terminal, and no source push or deployment occurred.
+
+## High learning rate / 40-epoch setting
+
+All 210 requested standalone executions completed successfully on the two RTX 3090 GPUs: ten datasets, five repulsion strengths, all nine methods, with common baselines reused across weights. Every method, including GP, DKL, and LDBLL, used learning rate 0.1 and 40 epochs. BDKN aggregation retained 100 steps at learning rate 0.1. Existing low-setting fits and shared data artifacts were preserved.
+
+Verification passed for 900 registered method artifacts across both settings, including settings/budgets, complete histories/checkpoints, baseline reuse, and independently recomputed held-out RMSE/NLL. All 32 numerical/source/suite tests passed. The combined offline report has 100 profiles, 1,200 metric rows, 800 checked HTML pages, 12,430 unique plot assets, and 67 distinct rendered LaTeX expressions. Real low/high setting switches passed on Results, Predictions, and Losses, alongside dataset/weight/method/observation/axis controls. Concurrent status writers now use unique temporary files and atomic replacement.
+
+The complete high-setting report is `website/dist/experiments/steps-lr0p1-r0p001/index.html`. Publication remains pending explicit authorization following the earlier automatic approval rejection; no new upload or deployment was attempted for this extension.

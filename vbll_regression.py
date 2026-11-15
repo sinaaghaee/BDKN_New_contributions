@@ -1,4 +1,4 @@
-"""Standalone vbll on the paper's 1D data. Edit CONFIG below, then run this file.
+"""Standalone vbll on shared scalar 1D data. Edit CONFIG below, then run this file.
 
 Model code copied from BDKN_Experiments; source paths mark each section.
 No imports from that repository or other experiment scripts are needed.
@@ -418,7 +418,7 @@ def draw_prediction(ax, label, grid, data, metrics):
     ax.plot(x,grid["mean"],label="Prediction")
     ax.plot(x,data["f_grid"].reshape(-1),"k--",lw=1,label="True function")
     ax.scatter(data["x_train"],data["y_train"],s=9,c="black",alpha=.45,label="Training data")
-    ax.set(xlabel="x",ylabel="y",title=f"{label} | RMSE {metrics['rmse']:.4f} | NLL {metrics['nll']:.4f}",xlim=(-1,1))
+    ax.set(xlabel="x",ylabel="y",title=f"{label} | RMSE {metrics['rmse']:.4f} | NLL {metrics['nll']:.4f}",xlim=(float(x.min()),float(x.max())))
     ax.legend(fontsize=7)
 
 

@@ -5,11 +5,13 @@ import json
 from pathlib import Path
 import re
 import shutil
+import os
+os.environ.setdefault('MPLCONFIGDIR',str(Path(__file__).resolve().parent/'.cache'/'matplotlib'))
 import numpy as np
 import matplotlib.pyplot as plt
 
 CSS = '''
-:root{--ink:#172033;--muted:#5d6678;--line:#d9dee8;--accent:#243b6b}*{box-sizing:border-box}body{margin:0;background:#f5f7fa;color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}main{max-width:1440px;margin:auto;padding:20px}header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 22px;background:#15284d;color:white;border-radius:9px}header h1{font-size:1.35rem;margin:0}header a{color:white;font-size:.9rem}h2{font-size:1.2rem;margin:0 0 12px}h3{font-size:1rem;margin:0 0 8px}a{color:var(--accent);text-underline-offset:3px}nav{display:flex;flex-wrap:wrap;gap:8px 24px;margin:14px 0;padding:12px 16px;background:white;border:1px solid var(--line);border-radius:8px}nav a{text-decoration:none}nav a[aria-current]{font-weight:750;text-decoration:underline;text-decoration-thickness:3px}.context,.toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px}.context{background:white;border:1px solid var(--line);padding:12px 16px;border-radius:8px;margin-top:14px}.context label{font-weight:600;font-size:.85rem}.choices{display:flex;flex-wrap:wrap;gap:6px}.choice-control{display:flex;flex-direction:column;gap:5px}.choice-label{font-size:.85rem;font-weight:600}.choices button{padding:5px 10px;font-size:.85rem;cursor:pointer}.choices button[aria-pressed="true"]{background:#243b6b;color:white;border-color:#243b6b}.choices button:disabled{cursor:default}.parameters td{white-space:normal;text-align:left}.katex{font-size:1.05em}.toolbar{margin:14px 0}select,button{font:inherit;padding:6px 9px;border:1px solid #aab6c7;background:white;border-radius:5px}select{max-width:100%}section{background:white;border:1px solid var(--line);border-radius:9px;margin:16px 0;padding:20px}.note,.muted,.plot-caption,footer{color:var(--muted);font-size:.85rem}.note{margin:8px 0}.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:7px}table{width:100%;border-collapse:collapse;font-size:.9rem}th,td{padding:9px 12px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}th:first-child,tbody th{text-align:left}thead th{background:#eaf0f8;color:#1f345d}tbody th{background:#fafbfc}tr:last-child>*{border-bottom:0}.metric{color:#172033;font-variant-numeric:tabular-nums}.epoch{color:var(--muted)}th button{padding:0;background:none;border:0;color:inherit;font:inherit;font-weight:700;cursor:pointer;text-decoration:underline;text-underline-offset:3px}.legend{display:flex;align-items:center;gap:8px;margin:8px 0 12px;font-size:.8rem;color:var(--muted)}.gradient{display:inline-block;width:110px;height:12px;background:linear-gradient(90deg,hsl(120 60% 88%),hsl(60 60% 88%),hsl(0 60% 88%));border:1px solid #d7dfd8;border-radius:3px}.weight-gallery{display:grid;grid-template-columns:repeat(var(--weights),minmax(220px,1fr));gap:12px;overflow-x:auto;margin:12px 0 22px;padding-bottom:8px}.gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.wide{grid-column:1/-1}figure{margin:0;border:1px solid var(--line);border-radius:7px;overflow:hidden}img{display:block;width:100%;height:auto}figcaption{background:#edf2f9;padding:9px 12px;font-size:.9rem;font-weight:600}.plot-caption{padding:0 12px;margin:7px 0}.downloads{display:flex;flex-wrap:wrap;gap:10px 18px;font-size:.85rem}details{margin:12px 0}summary{cursor:pointer;font-weight:600}.equation{font-family:Cambria,"STIX Two Math",serif;font-size:1.05rem;line-height:1.8;overflow-x:auto;padding:12px 16px;margin:12px 0;background:#f5f7fa;border-left:3px solid #5477b8}.definitions h3{margin-top:20px}.definitions p,.definitions li{max-width:1000px}.formula{white-space:pre-wrap;overflow-wrap:anywhere;background:#f5f7fa;border-radius:6px;padding:16px;font-size:.9rem}.settings td{white-space:normal}.sr-only{position:absolute;left:-10000px}footer{margin:20px 0}.context-group{display:flex;align-items:center;gap:8px}button,a,select{outline-offset:4px}[hidden]{display:none!important}.pair-title{margin-top:20px}code{overflow-wrap:anywhere}
+:root{--ink:#172033;--muted:#5d6678;--line:#d9dee8;--accent:#243b6b}*{box-sizing:border-box}body{margin:0;background:#f5f7fa;color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}main{max-width:1440px;margin:auto;padding:20px}header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 22px;background:#15284d;color:white;border-radius:9px}header h1{font-size:1.35rem;margin:0}header a{color:white;font-size:.9rem}h2{font-size:1.2rem;margin:0 0 12px}h3{font-size:1rem;margin:0 0 8px}a{color:var(--accent);text-underline-offset:3px}nav{display:flex;flex-wrap:wrap;gap:8px 24px;margin:14px 0;padding:12px 16px;background:white;border:1px solid var(--line);border-radius:8px}nav a{text-decoration:none}nav a[aria-current]{font-weight:750;text-decoration:underline;text-decoration-thickness:3px}.context,.toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px}.context{background:white;border:1px solid var(--line);padding:12px 16px;border-radius:8px;margin-top:14px}.context label{font-weight:600;font-size:.85rem}.choices{display:flex;flex-wrap:wrap;gap:6px}.choice-control{display:flex;flex-direction:column;gap:5px}.choice-label{font-size:.85rem;font-weight:600}.choices button{padding:5px 10px;font-size:.85rem;cursor:pointer}.choices button[aria-pressed="true"]{background:#243b6b;color:white;border-color:#243b6b}.choices button:disabled{cursor:default}.parameters td{white-space:normal;text-align:left}.katex{font-size:1.05em}.toolbar{margin:14px 0}select,button{font:inherit;padding:6px 9px;border:1px solid #aab6c7;background:white;border-radius:5px}select{max-width:100%}section{background:white;border:1px solid var(--line);border-radius:9px;margin:16px 0;padding:20px}.note,.muted,.plot-caption,footer{color:var(--muted);font-size:.85rem}.note{margin:8px 0}.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:7px}table{width:100%;border-collapse:collapse;font-size:.9rem}th,td{padding:9px 12px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}th:first-child,tbody th{text-align:left}thead th{background:#eaf0f8;color:#1f345d}tbody th{background:#fafbfc}tr:last-child>*{border-bottom:0}.metric a{color:inherit;text-decoration:none}.overview thead th{white-space:normal;min-width:90px}.overview th:first-child{position:sticky;left:0;z-index:1}.metric{color:#172033;font-variant-numeric:tabular-nums}.epoch{color:var(--muted)}th button{padding:0;background:none;border:0;color:inherit;font:inherit;font-weight:700;cursor:pointer;text-decoration:underline;text-underline-offset:3px}.legend{display:flex;align-items:center;gap:8px;margin:8px 0 12px;font-size:.8rem;color:var(--muted)}.gradient{display:inline-block;width:110px;height:12px;background:linear-gradient(90deg,hsl(120 60% 88%),hsl(60 60% 88%),hsl(0 60% 88%));border:1px solid #d7dfd8;border-radius:3px}.weight-gallery{display:grid;grid-template-columns:repeat(var(--weights),minmax(220px,1fr));gap:12px;overflow-x:auto;margin:12px 0 22px;padding-bottom:8px}.gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.wide{grid-column:1/-1}figure{margin:0;border:1px solid var(--line);border-radius:7px;overflow:hidden}img{display:block;width:100%;height:auto}figcaption{background:#edf2f9;padding:9px 12px;font-size:.9rem;font-weight:600}.plot-caption{padding:0 12px;margin:7px 0}.downloads{display:flex;flex-wrap:wrap;gap:10px 18px;font-size:.85rem}details{margin:12px 0}summary{cursor:pointer;font-weight:600}.equation{font-family:Cambria,"STIX Two Math",serif;font-size:1.05rem;line-height:1.8;overflow-x:auto;padding:12px 16px;margin:12px 0;background:#f5f7fa;border-left:3px solid #5477b8}.definitions h3{margin-top:20px}.definitions p,.definitions li{max-width:1000px}.formula{white-space:pre-wrap;overflow-wrap:anywhere;background:#f5f7fa;border-radius:6px;padding:16px;font-size:.9rem}.settings td{white-space:normal}.sr-only{position:absolute;left:-10000px}footer{margin:20px 0}.context-group{display:flex;align-items:center;gap:8px}button,a,select{outline-offset:4px}[hidden]{display:none!important}.pair-title{margin-top:20px}code{overflow-wrap:anywhere}
 @media(max-width:760px){main{padding:10px}header{padding:12px 14px}header h1{font-size:1.1rem}.context{align-items:stretch;gap:10px}.context-group{flex:1 1 100%;justify-content:space-between}.context select{width:65%;max-width:none}section{padding:12px}.gallery{grid-template-columns:1fr}th,td{padding:8px}nav{gap:10px 16px}.toolbar{gap:8px}}
 '''
 JS = r"""
@@ -47,9 +49,19 @@ const catalogNode=document.getElementById('experiment-catalog');
 if(catalogNode){
  const state=JSON.parse(catalogNode.textContent),entries=state.experiments;
  const datasetSelect=document.getElementById('dataset-select'),lrSelect=document.getElementById('lr-select'),strengthSelect=document.getElementById('strength-select');
- function fill(select,values,preferred){select.replaceChildren(...values.map(value=>{const option=document.createElement('button');option.type='button';option.dataset.value=value;option.textContent=value;return option}));select.value=values.includes(preferred)?preferred:values[0];select.dataset.value=select.value;select.querySelectorAll('button[data-value]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.value===select.value)));}
+ function rateLabel(value){return value==='0.1'?'High · LR 0.1 · 40 epochs':value==='0.001'?'Low · NN LR 0.001':value;}
+ function fill(select,values,preferred){select.replaceChildren(...values.map(value=>{const option=document.createElement('button');option.type='button';option.dataset.value=value;option.textContent=select===lrSelect?rateLabel(value):value;return option}));select.value=values.includes(preferred)?preferred:values[0];select.dataset.value=select.value;select.querySelectorAll('button[data-value]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.value===select.value)));}
  function switchExperiment(changed){
-  const candidates=entries.filter(entry=>entry.dataset===datasetSelect.value),previousLR=lrSelect.value,previousStrength=strengthSelect.value;
+  if(state.page==='index.html'){
+   const available=entries.filter(entry=>entry.learning_rate===lrSelect.value);
+   if(changed!=='strength')fill(strengthSelect,[...new Set(available.map(entry=>entry.repulsion))].sort((a,b)=>Number(a)-Number(b)),strengthSelect.value);
+   const matching=available.filter(entry=>entry.repulsion===strengthSelect.value),activeDataset=entries.find(entry=>entry.id===state.active).dataset;
+   const target=matching.find(entry=>entry.dataset===activeDataset)||matching[0];
+   if(target)location.assign(state.root+target.directory+state.page+location.hash);
+   return;
+  }
+  const dataset=datasetSelect.value;
+  const candidates=entries.filter(entry=>entry.dataset===dataset),previousLR=lrSelect.value,previousStrength=strengthSelect.value;
   if(changed==='dataset')fill(lrSelect,[...new Set(candidates.map(entry=>entry.learning_rate))].sort((a,b)=>Number(a)-Number(b)),previousLR);
   const available=candidates.filter(entry=>entry.learning_rate===lrSelect.value);
   if(changed!=='strength')fill(strengthSelect,[...new Set(available.map(entry=>entry.repulsion))].sort((a,b)=>Number(a)-Number(b)),previousStrength);
@@ -129,16 +141,16 @@ def page(ctx,title,filename,body):
     catalog=[{k:e[k] for k in ['id','dataset','learning_rate','repulsion','directory']} for e in registry['experiments']]
     datasets=registry['datasets']
     dataset_values=[(key,value['label']) for key,value in datasets.items() if any(e['dataset']==key for e in catalog)]
-    rates=sorted({e['learning_rate'] for e in catalog if e['dataset']==entry['dataset']},key=float)
-    strengths=sorted({e['repulsion'] for e in catalog if e['dataset']==entry['dataset'] and e['learning_rate']==entry['learning_rate']},key=float)
-    controls=choices('dataset-select','Dataset',dataset_values,entry['dataset'])+choices('lr-select','NN learning rate',[(v,v) for v in rates],entry['learning_rate'])
+    rates=sorted({e['learning_rate'] for e in catalog if filename=='index.html' or e['dataset']==entry['dataset']},key=float)
+    strengths=sorted({e['repulsion'] for e in catalog if (filename=='index.html' or e['dataset']==entry['dataset']) and e['learning_rate']==entry['learning_rate']},key=float)
+    controls=choices('dataset-select','Dataset',[('all','All datasets')] if filename=='index.html' else dataset_values,'all' if filename=='index.html' else entry['dataset'],filename=='index.html')+choices('lr-select','Training setting',[(v,'High · LR 0.1 · 40 epochs' if v=='0.1' else 'Low · NN LR 0.001' if v=='0.001' else v) for v in rates],entry['learning_rate'])
     controls+=choices('strength-select','Repulsion weight',[('all','All weights')] if filename=='repulsion.html' else [(v,v) for v in strengths],'all' if filename=='repulsion.html' else entry['repulsion'],filename=='repulsion.html')
     links=[('index.html','Results'),('figures.html','Predictions'),('de_bdkn_results.html','DE ↔ BDKN'),('repulsion.html','Compare weights'),('losses.html','Losses'),('dataset.html','Data'),('settings.html','Settings')]
     nav=''.join(f'<a href="{file}"'+(' aria-current="page"' if filename==file else '')+f'>{label}</a>' for file,label in links)
     state=json.dumps(dict(experiments=catalog,datasets={k:v['label'] for k,v in datasets.items()},active=entry['id'],root=prefix,page=filename)).replace('<','\\u003c')
-    math_head=f'<link rel="stylesheet" href="{prefix}vendor/katex/katex.min.css">' if filename in ('losses.html','repulsion.html') else ''
+    math_head=f'<link rel="stylesheet" href="{prefix}vendor/katex/katex.min.css">' if filename in ('losses.html','repulsion.html','dataset.html') else ''
     math_script=f'<script src="{prefix}vendor/katex/katex.min.js"></script>' if math_head else ''
-    return f'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{escape(title)} · Regression comparison</title><link rel="stylesheet" href="style.css">{math_head}</head><body><main><header><h1>Regression comparison</h1><a href="downloads/metrics.csv" download>Download results</a></header><div class="context">{controls}</div><nav aria-label="Report pages">{nav}</nav>{body}</main><script id="experiment-catalog" type="application/json">{state}</script><script src="asset-map.js"></script>{math_script}<script src="report.js"></script></body></html>'
+    return f'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{escape(title)} · Regression comparison</title><link rel="stylesheet" href="style.css">{math_head}</head><body><main><header><h1>Regression comparison</h1><a href="{prefix+'downloads/all_results.csv' if filename=='index.html' else 'downloads/metrics.csv'}" download>Download results</a></header><div class="context">{controls}</div><nav aria-label="Report pages">{nav}</nav>{body}</main><script id="experiment-catalog" type="application/json">{state}</script><script src="asset-map.js"></script>{math_script}<script src="report.js"></script></body></html>'
 
 
 def model_table(ctx):
@@ -199,7 +211,7 @@ def loss_definitions():
         ],[(r'f_\psi,K^{\mathrm{SKI}}','Learned neural features and the configured grid-interpolated RBF covariance.'),(r'r,m,\sigma^2','Residual y − m(X), mean function, and observation noise variance.')]),
         ('ldbll','LDBLL',[
             r'\mathcal L_{\mathrm{LDBLL}}=-\frac1n\log p(y\mid\Phi)+\frac cn\underset{x\in\mathcal I}{\operatorname{mean}}\,D_{\mathrm{KL}}\!\left[p(\partial_x f\mid x)\,\Vert\,q(\partial_x f\mid x)\right]'
-        ],[(r'\Phi,n','Learned Bayesian linear-layer features and training count.'),(r'p(y\mid\Phi)','Gaussian Bayesian linear-layer marginal likelihood; its negative per observation is the likelihood curve.'),(r'p(\partial_x f\mid x),q(\partial_x f\mid x)','Derivative prior and posterior; the second term is the derivative-KL curve.'),(r'c,\mathcal I','Derivative scaling factor and index points (perturbed training inputs).')]),
+        ],[(r'\Phi,n','Learned Bayesian linear-layer features and training count.'),(r'p(y\mid\Phi)','Gaussian Bayesian linear-layer marginal likelihood; its negative per observation is the likelihood curve.'),(r'p(\partial_x f\mid x),q(\partial_x f\mid x)','Derivative prior and posterior defining the KL penalty.'),(r'c,\mathcal I','Derivative scaling factor and index points (perturbed training inputs).')]),
         ('vbll','VBLL',[
             r'\mathcal L_{\mathrm{VBLL}}=-\frac1B\sum_{b=1}^{B}\mathbb E_{q(w)}\log\mathcal N(y_b;w^\top\phi_b,\sigma^2)+\frac1n\left[D_{\mathrm{KL}}(q(w)\Vert p(w))-\Omega(\sigma^{-2})\right]',
             r'\Omega(\tau)=a\log\tau-\frac{s}{2}\tau'
@@ -216,13 +228,52 @@ def loss_definitions():
     return body+'</section>'
 
 
+
+_OVERVIEW_CACHE={}
+
+
+def overview_tables(ctx):
+    """Rows compare methods within one dataset; never color across target scales."""
+    registry=ctx['registry'];active=ctx['entry'];names=ctx['names']
+    prefix='' if not active['directory'] else '../../'
+    cache_key=(json.dumps(registry,sort_keys=True),active['learning_rate'],active['repulsion'])
+    if cache_key not in _OVERVIEW_CACHE:
+        selected=[]
+        for entry in registry['experiments']:
+            if entry['learning_rate']!=active['learning_rate'] or entry['repulsion']!=active['repulsion']:continue
+            rows=[]
+            for folder in Path(entry['run']).iterdir():
+                if folder.is_dir() and (folder/'metrics.json').exists():rows+=json.loads((folder/'metrics.json').read_text())
+            if {r['method'] for r in rows}!=set(names):raise ValueError('Incomplete overview profile: '+entry['id'])
+            selected.append((entry,{r['method']:r for r in rows}))
+        _OVERVIEW_CACHE[cache_key]=selected
+    selected=_OVERVIEW_CACHE[cache_key]
+    budget='40 epochs for every method' if active.get('epochs')==40 else '2,000 epochs; DKL and LDBLL 10,000'
+    body='<section><h2>Results across datasets</h2><p class="note">Fixed held-out observations over each full plotting domain · lower is better.</p><p class="note">'+budget+' · BDKN aggregation: 100 steps.</p><nav aria-label="Metrics"><a href="#rmse">RMSE</a><a href="#nll">NLL</a><a href="#training_seconds">Training time</a></nav></section>'
+    for metric,label,digits in [('rmse','Test RMSE',5),('nll','Test NLL',5),('training_seconds','Training time · seconds',2)]:
+        body+='<section id="'+metric+'"><h2>'+label+'</h2>'+legend().replace('within each column','within each dataset row')+'<div class="table-wrap"><table class="overview" data-metric="'+metric+'"><thead><tr><th>Dataset</th>'
+        body+=''.join('<th>'+escape(short_label(name))+'</th>' for name in names.values())+'</tr></thead><tbody>'
+        for entry,lookup in selected:
+            directory=prefix+entry['directory'];label=registry['datasets'][entry['dataset']]['label']
+            body+='<tr><th scope="row"><a href="'+directory+'figures.html">'+escape(label)+'</a></th>'
+            values=[lookup[key].get(metric) for key in names]
+            for key in names:
+                cell=metric_cell(lookup[key].get(metric),values,digits)
+                # Keep the heatmap and machine-readable value on the cell.
+                start=cell.index('>')+1
+                cell=cell[:start]+'<a href="'+directory+'figures.html#'+key+'">'+cell[start:-5]+'</a></td>'
+                body+=cell
+            body+='</tr>'
+        body+='</tbody></table></div></section>'
+    return body
+
+
 def render_report(ctx):
     output=ctx['output'];names=ctx['names'];rows=ctx['rows'];configs=ctx['configs'];lookup={r['method']:r for r in rows};dataset=ctx['registry']['datasets'][ctx['entry']['dataset']]
-    body='<section><h2>Results</h2>'+legend()+model_table(ctx)+'</section>'
-    body+='<section><h2>Prediction comparison</h2>'+observation_controls()+image('all_models.png','All methods · same axes · 95% predictive intervals',True,True)+'</section>'
+    body=overview_tables(ctx)
     (output/'index.html').write_text(page(ctx,'Results','index.html',body))
     (output/'main_results.html').write_text(page(ctx,'Results','index.html',body))
-    body='<section><h2>Predictions</h2><p class="note">Each panel shows its full Y range.</p>'+choices('model-filter','Method',[('all','All')]+[(key,short_label(label)) for key,label in names.items()],'all')+observation_controls()+'<div class="gallery">'
+    body='<section><h2>Predictions</h2><p class="note">Individual panels show their full Y range. The all-methods overview uses shared axes.</p>'+choices('model-filter','Method',[('all','All')]+[(key,short_label(label)) for key,label in names.items()],'all')+observation_controls()+image('all_models.png','All methods · same axes · 95% predictive intervals',True,True)+'<div class="gallery">'
     for key,label in names.items():body+=f'<article id="{key}" data-model="{key}">'+image(key+'.png',label,observation=True)+'</article>'
     body+='</div></section>'
     (output/'figures.html').write_text(page(ctx,'Predictions','figures.html',body))
@@ -244,7 +295,11 @@ def render_report(ctx):
     (output/'losses.html').write_text(page(ctx,'Losses','losses.html',body))
     formula=dataset.get('formula','Formula not provided for this dataset.')
     data=ctx['data'];metadata=json.loads(str(data['metadata'])) if 'metadata' in data else {}
-    body='<section><h2>'+escape(dataset['label'])+'</h2>'+image('data.png','Training and test observations',True)+f'<p class="note">{len(data["x_train"])} training · {len(data["x_test"])} test · seed {metadata.get("seed","—")}</p><h3>Generating function</h3><pre class="formula">'+escape(formula)+'</pre><a href="downloads/toy_1d.npz" download>Download dataset</a></section>'
+    formula_math=dataset.get('formula_latex',dataset.get('formula') if 'sampling' in dataset else None)
+    formula_block=latex('f(x)='+formula_math) if formula_math else '<pre class="formula">'+escape(formula)+'</pre>'
+    sampling=metadata.get('sampling',dataset.get('sampling','Uniform(-1, 1)'))
+    noise=metadata.get('noise_std',dataset.get('noise_std',.1))
+    body='<section><h2>'+escape(dataset['label'])+'</h2>'+image('data.png','Training and test observations',True)+f'<p class="note">{len(data["x_train"])} training · {len(data["x_test"])} test · seed {metadata.get("seed","—")}</p><h3>Generating function</h3>'+formula_block+(latex(r'\sigma(t)=\frac{1}{1+e^{-t}}') if ctx['entry']['dataset']=='steps' else '')+(latex(r'y=f(x)') if noise==0 else latex(r'\varepsilon\sim\mathcal N(0,\sigma_\varepsilon^2),\quad y=f(x)+\varepsilon,\quad \sigma_\varepsilon='+format(noise,'.8g')))+'<p>'+escape(sampling)+'</p><p class="note">Test inputs: independent uniform observations over the full displayed domain. '+('NumPy normalized sinc: sin(πt)/(πt), with sinc(0) = 1.' if 'sinc' in ctx['entry']['dataset'] else '')+'</p><a href="downloads/toy_1d.npz" download>Download dataset</a></section>'
     (output/'dataset.html').write_text(page(ctx,'Data','dataset.html',body))
     body='<section><h2>Settings</h2><div class="table-wrap"><table class="settings"><thead><tr><th>Method</th><th>Epochs</th><th>Learning rate</th><th>Hidden layers / kernel</th><th>Repulsion</th><th>Device</th></tr></thead><tbody>'
     for method,cfg in configs.items():
@@ -303,7 +358,7 @@ def render_strengths(ctx):
                         ax.plot(x,data['f_grid'].reshape(-1),'k--',lw=1.2,label='True function')
                         ax.plot(x,pred['grid_mean'],color='#396ca9',lw=1.5,label='Prediction')
                         ax.fill_between(x,pred['grid_lower'],pred['grid_upper'],color='#396ca9',alpha=.18,label='95% interval')
-                        ax.set(xlim=(-1,1),xlabel='x',ylabel='y',title='λ = '+e['repulsion'])
+                        ax.set(xlim=(float(x.min()),float(x.max())),xlabel='x',ylabel='y',title='λ = '+e['repulsion'])
                         ax.legend(fontsize=7);ax.grid(alpha=.12);fig.tight_layout();fig.savefig(filename,dpi=140,bbox_inches='tight');plt.close(fig)
                 comparison[method][stage]=series
             curves=[]

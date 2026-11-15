@@ -41,6 +41,20 @@
     "Repulsive ensembles tested at strengths 0.001, 0.01, and 0.1; non-repulsive fits reused across strength comparisons.",
     "CUDA-synchronized fitting timers exclude prediction and plotting; deep-ensemble checkpoint reuse retains its original fitting cost.",
     "Offline report registry supports dataset, neural learning-rate, and repulsion-strength selection.",
-    "Additional requested strengths 1 and 10 added. Dedicated unweighted repulsion-loss plots and default logarithmic loss axes; extreme FRDE errors retained with an explicitly labeled data-range zoom."
-  ]
+    "Additional requested strengths 1 and 10 added; dedicated unweighted repulsion-loss plots use default logarithmic axes. Side-by-side prediction panels show their full range; the all-methods overview retains shared axes.",
+    "Ten scalar datasets: existing paper steps retained; nine source-derived functions use original training counts/patterns and active noise settings, with deterministic seed 123 and independent full-domain held-out observations.",
+    "One-input/two-output sine/cosine source split into separate scalar tasks sharing input coordinates; optimization/active-learning examples use fixed initial data without adaptive acquisition.",
+    "Standalone model operations/settings unchanged; plotting domains now follow dataset grids. A resumable two-GPU suite reuses validated non-repulsive fits across weight profiles.",
+    "Requested high setting: all ten datasets and five repulsion strengths, every method including GP at LR 0.1 for 40 epochs; Bayesian aggregation unchanged at 100 steps and LR 0.1. Original data artifacts and low-setting fits preserved."
+  ],
+  "dataset_source_sha256": {
+    "BDKN/Clean_Code/toy_example/x^3with gp.py": "77684e61b1511397dc466cac01aed2a0b60e3e35f076c9af217b085389956fc8",
+    "BDKN/Clean_Code/toy_example/forrester.py": "6e609a91c684701b45ad5231eadf8a2b8edd667b5c65a08b1902350a56ea6852",
+    "BDKN/Clean_Code/toy_example/jeffreuys_with gp.py": "7aee26fa097e5d36a9884d5bc8b2ab54fb8241bf9dd45cab524ed708e6748876",
+    "BLLN/Benchamrk/LDBLL/toy_problem.py": "dd77fe6c3d59856c1c8baf0405acb7df11fa75d0beddbfa7e4d31dbf3a701d43",
+    "BLLN/Benchamrk/LDBLL/active_learning.py": "aec41c0ee16abdad106137e11887d528d045b207447695c0ada7e922b9a4d01b",
+    "BLLN/Benchamrk/LDBLL/training_viz.py": "8aea33b55a9366e8fd7561f0e98064893137e06e76ea942c5656cc833f82a885",
+    "BLLN/Benchamrk/LDBLL/bayes_opt.py": "5794972e1faa0c3d9b33a80d90106abbe2a121e81d67892934b56d693fe584c4",
+    "BLLN/Benchamrk/LDBLL/toy_problem_multivariate.py": "2b77ee6746ef864c1686621935814a52ce5e258ece0eea7466291a89948ba2b1"
+  }
 }

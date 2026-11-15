@@ -1,0 +1,145 @@
+{
+  "version": 1,
+  "method": "forde",
+  "rows": [
+    {
+      "network": 1,
+      "mean": 0.3209059329364348,
+      "ci95_low": -0.739874276768606,
+      "ci95_high": 1.3816861426414755,
+      "posterior_sd": 0.5401034329573488,
+      "probability_positive": 0.7251308777582529,
+      "mean_absolute_test_contribution_share": 0.07169076676551374,
+      "test_rmse": 0.5387009807245065,
+      "test_nll": 0.8010677276985587
+    },
+    {
+      "network": 2,
+      "mean": -0.1262221901775022,
+      "ci95_low": -0.20333305206168936,
+      "ci95_high": -0.04911132829331502,
+      "posterior_sd": 0.039261517928893125,
+      "probability_positive": 0.0007925044578843956,
+      "mean_absolute_test_contribution_share": 0.20233700899674925,
+      "test_rmse": 2.166658766869062,
+      "test_nll": 1.9771213131087833
+    },
+    {
+      "network": 3,
+      "mean": 0.41927008656333103,
+      "ci95_low": 0.1900426588335537,
+      "ci95_high": 0.6484975142931084,
+      "posterior_sd": 0.11671269836308579,
+      "probability_positive": 0.9997746606523605,
+      "mean_absolute_test_contribution_share": 0.13386851351001391,
+      "test_rmse": 0.8388877706550302,
+      "test_nll": 1.3182521949904316
+    },
+    {
+      "network": 4,
+      "mean": 0.2342060494256226,
+      "ci95_low": -1.1192037963739132,
+      "ci95_high": 1.5876158952251584,
+      "posterior_sd": 0.6890977954027452,
+      "probability_positive": 0.6339622804704261,
+      "mean_absolute_test_contribution_share": 0.0381859807672826,
+      "test_rmse": 0.5341195715880644,
+      "test_nll": 0.8896364637292391
+    },
+    {
+      "network": 5,
+      "mean": 1.4812888963017525,
+      "ci95_low": 1.208328772697686,
+      "ci95_high": 1.7542490199058192,
+      "posterior_sd": 0.13897949685544372,
+      "probability_positive": 1.0,
+      "mean_absolute_test_contribution_share": 0.5539177299604405,
+      "test_rmse": 0.36314305681100123,
+      "test_nll": 0.5139129461464255
+    }
+  ],
+  "de_weight": 0.2,
+  "degrees_of_freedom": 100.0,
+  "sigma_p2": 6.073788226747358,
+  "noise_variance_mean": 0.11254725603426247,
+  "coefficient_correlation": [
+    [
+      1.0,
+      -0.34085868238856376,
+      -0.27835346013178164,
+      -0.7684431836539831,
+      0.07462892221465296
+    ],
+    [
+      -0.3408586823885637,
+      1.0,
+      0.19701833620469864,
+      -0.1949803295707462,
+      -0.6333095998252757
+    ],
+    [
+      -0.27835346013178164,
+      0.19701833620469864,
+      1.0,
+      -0.1592256621228824,
+      0.4383693168835624
+    ],
+    [
+      -0.768443183653983,
+      -0.1949803295707462,
+      -0.1592256621228824,
+      1.0,
+      0.04268974974307668
+    ],
+    [
+      0.07462892221465296,
+      -0.6333095998252758,
+      0.4383693168835624,
+      0.04268974974307668,
+      1.0
+    ]
+  ],
+  "function_correlation": [
+    [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    [
+      null,
+      0.9999999999999999,
+      -0.713672853122247,
+      null,
+      0.8266443907987605
+    ],
+    [
+      null,
+      -0.713672853122247,
+      0.9999999999999999,
+      null,
+      -0.7548645303179241
+    ],
+    [
+      null,
+      null,
+      null,
+      null,
+      null
+    ],
+    [
+      null,
+      0.8266443907987604,
+      -0.7548645303179241,
+      null,
+      1.0
+    ]
+  ],
+  "reconstructed_mean_max_absolute_error": {
+    "test": 2.61761272046801e-07,
+    "grid": 2.6176127199128985e-07
+  },
+  "posterior": "Exact marginal Student-t coefficients",
+  "prior_reference": "Conditional Gaussian prior at fitted posterior mean noise variance; not an unconditional prior density"
+}

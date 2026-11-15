@@ -265,6 +265,7 @@ def write_overview_download(output,registry):
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--registry',default=REGISTRY_PATH,help='Dataset, LR, strength, and completed-run registry')
+    parser.add_argument('--aggregation-workers',type=int,default=2,help='CPU workers for saved-posterior diagnostics')
     parser.add_argument('--ui-only',action='store_true',help='Refresh tables, controls and equations using existing validated report figures')
     parser.add_argument('--learning-rate',type=float,help='Render only this registered learning-rate setting')
     parser.add_argument('--datasets',nargs='+',help='Render only these dataset IDs while retaining the full overview registry')
@@ -277,6 +278,8 @@ def main():
         entry['run']=str(relative(args.run));registry['experiments']=[entry]
     output=relative(args.output);output.mkdir(parents=True,exist_ok=True)
     shutil.copytree(ROOT/'website/vendor',output/'vendor',dirs_exist_ok=True)
+    from aggregation_report import generate as generate_aggregation
+    generate_aggregation(registry,output,args.aggregation_workers)
     hashes={}
     for entry in registry['experiments']:
         if args.datasets and entry['dataset'] not in args.datasets:continue

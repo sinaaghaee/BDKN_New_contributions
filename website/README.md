@@ -27,3 +27,5 @@ Loss definitions are organized method by method, with LaTeX equations and concis
 `run_suite.py --register` adds completed dataset/weight profiles. Cross-dataset tables retain learning-rate and strength controls; the other pages use dataset buttons. Plot bounds come from each dataset grid. The combined CSV download includes all registered profiles.
 
 Training setting buttons now compare the existing low/long setting with High LR 0.1 / 40 epochs. High applies to every method, including GP; Bayesian aggregation remains 100 steps. Each setting covers all ten datasets and five weights.
+
+Aggregation weights reads the saved training posterior, showing Student-t marginals, intervals, correlations, and functions/contributions for each BDKN variant. Observation switches affect function panels, while the same training-derived coefficient posterior is retained. Coefficients are unconstrained; contribution shares are descriptive summaries rather than probabilities.

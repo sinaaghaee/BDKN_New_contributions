@@ -22,6 +22,15 @@ function updateObservations(){const mode=observations.value;const suffix=mode===
 if(observations)observations.addEventListener('change',updateObservations);
 
 
+const aggregationMethod=document.getElementById('aggregation-method');
+if(aggregationMethod){
+ function filterAggregation(){document.querySelectorAll('[data-aggregation-method]').forEach(card=>card.hidden=aggregationMethod.value!=='all'&&card.dataset.aggregationMethod!==aggregationMethod.value);}
+ const selected=location.hash.match(/^#aggregation-(bdkn|frde|wrde|forde|all)$/)?.[1]||'bdkn';
+ aggregationMethod.value=selected;aggregationMethod.dataset.value=selected;
+ aggregationMethod.querySelectorAll('button[data-value]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.value===selected)));
+ filterAggregation();aggregationMethod.addEventListener('change',()=>{filterAggregation();location.hash='#aggregation-'+aggregationMethod.value;});
+}
+
 const lossMethod=document.getElementById('loss-method');
 if(lossMethod)lossMethod.addEventListener('change',()=>document.querySelectorAll('[data-loss-method]').forEach(figure=>figure.hidden=lossMethod.value!=='all'&&figure.dataset.lossMethod!==lossMethod.value));
 

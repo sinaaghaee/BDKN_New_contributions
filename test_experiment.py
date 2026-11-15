@@ -216,7 +216,7 @@ class ReportComparisonTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             path=Path(directory)/'registry.json';path.write_text(json.dumps(registry))
             parsed=load_registry(path,ROOT)
-            self.assertEqual([e['repulsion'] for e in parsed['experiments'] if e['dataset']=='steps'],['0.001','0.01','0.1','1','10'])
+            self.assertEqual([e['repulsion'] for e in parsed['experiments'] if e['dataset']=='steps' and e['learning_rate']=='0.001'],['0.001','0.01','0.1','1','10'])
             self.assertEqual(parsed['experiments'][0]['directory'],'')
             self.assertTrue(parsed['experiments'][1]['directory'].startswith('experiments/'))
             registry['experiments'].append(dict(registry['experiments'][0],id='duplicate'))

@@ -19,12 +19,13 @@ function environment(page,mutate){
  elements['observation-status']={textContent:''};
  const images=fixture.images[page].map(a=>({dataset:{lossBase:a['data-loss-base'],logY:a['data-log-y'],observationBase:a['data-observation-base']},src:a.src,parentElement:{href:a.src},note:{textContent:''},closest(){return {querySelector:()=>this.note}}}));
  const cards=state.experiments.length?['bdkn','frde','gp'].map(model=>({dataset:{model,lossMethod:model},hidden:false})):[];
+ const aggregationCards=['bdkn','frde','wrde','forde'].map(method=>({dataset:{aggregationMethod:method},hidden:false}));
  const location={hash:'#frde',assigned:null,assign(url){this.assigned=url}};
- const document={getElementById:id=>elements[id]??null,querySelectorAll(selector){if(selector==='.choices')return Object.values(elements).filter(e=>e.dataset);if(selector==='[data-loss-base]')return images.filter(i=>i.dataset.lossBase);if(selector==='[data-observation-base]')return images.filter(i=>i.dataset.observationBase);if(selector==='[data-model]'||selector==='[data-loss-method]')return cards;return []},createElement(){return button('')}};
+ const document={getElementById:id=>elements[id]??null,querySelectorAll(selector){if(selector==='.choices')return Object.values(elements).filter(e=>e.dataset);if(selector==='[data-loss-base]')return images.filter(i=>i.dataset.lossBase);if(selector==='[data-observation-base]')return images.filter(i=>i.dataset.observationBase);if(selector==='[data-aggregation-method]')return aggregationCards;if(selector==='[data-model]'||selector==='[data-loss-method]')return cards;return []},createElement(){return button('')}};
  const context={document,location,Event:class{constructor(type){this.type=type}}};vm.createContext(context);
  const assetMap=path.join(fixture.root,'asset-map.js');if(fs.existsSync(assetMap))vm.runInContext(fs.readFileSync(assetMap,'utf8'),context);
  vm.runInContext(fs.readFileSync(path.join(fixture.root,'report.js'),'utf8'),context);
- return {elements,images,state,location,context,cards};
+ return {elements,images,state,location,context,cards,aggregationCards};
 }
 for(const page of ['losses.html','repulsion.html']){
  const env=environment(page);const loss=env.images.filter(i=>i.dataset.lossBase);assert.ok(loss.length);
@@ -34,7 +35,7 @@ for(const page of ['losses.html','repulsion.html']){
  }
  console.log('PASS: all loss-axis button combinations on '+page);
 }
-for(const page of ['figures.html','repulsion.html']){
+for(const page of ['figures.html','repulsion.html','aggregation.html']){
  const env=environment(page);const obs=env.images.filter(i=>i.dataset.observationBase);assert.ok(obs.length);
  for(const mode of ['test','both','none','train']){
   env.elements['observation-mode'].click(mode);
@@ -42,7 +43,7 @@ for(const page of ['figures.html','repulsion.html']){
  }
  console.log('PASS: all observation buttons on '+page);
 }
-for(const page of ['index.html','figures.html','losses.html']){
+for(const page of ['index.html','figures.html','losses.html','aggregation.html']){
  const env=environment(page);const active=env.state.experiments.find(e=>e.id===env.state.active);
  for(const weight of ['0.01','0.1','1','10','0.001']){
   if(!env.elements['strength-select'].buttons.some(b=>b.dataset.value===weight))continue;
@@ -78,7 +79,7 @@ for(const page of ['index.html','figures.html','losses.html']){
  console.log('PASS: overview LR switching when the active dataset has no run at that LR');
 }
 
-for(const page of ['index.html','figures.html','losses.html']){
+for(const page of ['index.html','figures.html','losses.html','aggregation.html']){
  const env=environment(page);
  for(const rate of env.elements['lr-select'].buttons.map(button=>button.dataset.value).reverse()){
   env.elements['lr-select'].click(rate);
@@ -89,4 +90,13 @@ for(const page of ['index.html','figures.html','losses.html']){
   assert.ok(fs.existsSync(path.resolve(fixture.root,env.state.root+target.directory+page)));
  }
  console.log('PASS: real low/high training-setting switches on '+page);
+}
+
+{
+ const env=environment('aggregation.html');
+ for(const method of ['frde','wrde','forde','bdkn','all']){
+  env.elements['aggregation-method'].click(method);
+  assert.ok(env.aggregationCards.every(card=>card.hidden===(method!=='all'&&card.dataset.aggregationMethod!==method)));
+ }
+ console.log('PASS: aggregation-variant filters and selected variant URL');
 }

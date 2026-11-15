@@ -104,7 +104,7 @@ def verify(root,registry,fixture=None):
     if fixture:
         # The browser control harness uses a complete real profile and actual assets.
         selected=next((e for e in registry['experiments'] if e['dataset']=='he'),registry['experiments'][0])
-        folder=root/selected['directory'];texts={name:(folder/name).read_text() for name in ('index.html','figures.html','losses.html','repulsion.html')}
+        folder=root/selected['directory'];texts={name:(folder/name).read_text() for name in ('index.html','figures.html','losses.html','repulsion.html','aggregation.html')}
         objects={name:Page(text) for name,text in texts.items()}
         state=lambda text:json.loads(re.search(r'<script id="experiment-catalog" type="application/json">(.*?)</script>',text).group(1))
         Path(fixture).write_text(json.dumps(dict(root=str(folder.resolve()),states={name:state(text) for name,text in texts.items()},groups={name:p.groups for name,p in objects.items()},images={name:p.images for name,p in objects.items()},math=sorted(all_math))))

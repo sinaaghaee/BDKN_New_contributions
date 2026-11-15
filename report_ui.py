@@ -40,6 +40,15 @@ function updateObservations(){const mode=observations.value;const suffix=mode===
 if(observations)observations.addEventListener('change',updateObservations);
 
 
+const aggregationMethod=document.getElementById('aggregation-method');
+if(aggregationMethod){
+ function filterAggregation(){document.querySelectorAll('[data-aggregation-method]').forEach(card=>card.hidden=aggregationMethod.value!=='all'&&card.dataset.aggregationMethod!==aggregationMethod.value);}
+ const selected=location.hash.match(/^#aggregation-(bdkn|frde|wrde|forde|all)$/)?.[1]||'bdkn';
+ aggregationMethod.value=selected;aggregationMethod.dataset.value=selected;
+ aggregationMethod.querySelectorAll('button[data-value]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.value===selected)));
+ filterAggregation();aggregationMethod.addEventListener('change',()=>{filterAggregation();location.hash='#aggregation-'+aggregationMethod.value;});
+}
+
 const lossMethod=document.getElementById('loss-method');
 if(lossMethod)lossMethod.addEventListener('change',()=>document.querySelectorAll('[data-loss-method]').forEach(figure=>figure.hidden=lossMethod.value!=='all'&&figure.dataset.lossMethod!==lossMethod.value));
 
@@ -145,10 +154,10 @@ def page(ctx,title,filename,body):
     strengths=sorted({e['repulsion'] for e in catalog if (filename=='index.html' or e['dataset']==entry['dataset']) and e['learning_rate']==entry['learning_rate']},key=float)
     controls=choices('dataset-select','Dataset',[('all','All datasets')] if filename=='index.html' else dataset_values,'all' if filename=='index.html' else entry['dataset'],filename=='index.html')+choices('lr-select','Training setting',[(v,'High · LR 0.1 · 40 epochs' if v=='0.1' else 'Low · NN LR 0.001' if v=='0.001' else v) for v in rates],entry['learning_rate'])
     controls+=choices('strength-select','Repulsion weight',[('all','All weights')] if filename=='repulsion.html' else [(v,v) for v in strengths],'all' if filename=='repulsion.html' else entry['repulsion'],filename=='repulsion.html')
-    links=[('index.html','Results'),('figures.html','Predictions'),('de_bdkn_results.html','DE ↔ BDKN'),('repulsion.html','Compare weights'),('losses.html','Losses'),('dataset.html','Data'),('settings.html','Settings')]
+    links=[('index.html','Results'),('figures.html','Predictions'),('de_bdkn_results.html','DE ↔ BDKN'),('repulsion.html','Compare weights'),('losses.html','Losses'),('aggregation.html','Aggregation weights'),('dataset.html','Data'),('settings.html','Settings')]
     nav=''.join(f'<a href="{file}"'+(' aria-current="page"' if filename==file else '')+f'>{label}</a>' for file,label in links)
     state=json.dumps(dict(experiments=catalog,datasets={k:v['label'] for k,v in datasets.items()},active=entry['id'],root=prefix,page=filename)).replace('<','\\u003c')
-    math_head=f'<link rel="stylesheet" href="{prefix}vendor/katex/katex.min.css">' if filename in ('losses.html','repulsion.html','dataset.html') else ''
+    math_head=f'<link rel="stylesheet" href="{prefix}vendor/katex/katex.min.css">' if filename in ('losses.html','repulsion.html','dataset.html','aggregation.html') else ''
     math_script=f'<script src="{prefix}vendor/katex/katex.min.js"></script>' if math_head else ''
     return f'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{escape(title)} · Regression comparison</title><link rel="stylesheet" href="style.css">{math_head}</head><body><main><header><h1>Regression comparison</h1><a href="{prefix+'downloads/all_results.csv' if filename=='index.html' else 'downloads/metrics.csv'}" download>Download results</a></header><div class="context">{controls}</div><nav aria-label="Report pages">{nav}</nav>{body}</main><script id="experiment-catalog" type="application/json">{state}</script><script src="asset-map.js"></script>{math_script}<script src="report.js"></script></body></html>'
 
@@ -308,6 +317,8 @@ def render_report(ctx):
     body+='</tbody></table></div><div class="downloads"><a href="downloads/settings.json" download>Settings JSON</a><a href="downloads/metrics.csv" download>Metrics CSV</a><a href="downloads/provenance.json" download>Source provenance</a></div></section>'
     (output/'settings.html').write_text(page(ctx,'Settings','settings.html',body))
     render_strengths(ctx)
+    from aggregation_report import render as render_aggregation
+    render_aggregation(ctx)
 
 _STRENGTH_CACHE={}
 
@@ -421,7 +432,7 @@ def deduplicate_assets(root, registry):
             text=re.sub(r'(src|href)="(assets/[^\"]+\.png)"',lambda match:match[1]+'="'+mapping[match[2]]+'"',text)
             html.write_text(text)
         map_file.write_text('globalThis.REPORT_ASSETS = '+json.dumps(mapping,separators=(',',':'))+';\n')
-        used.update(Path(value).name for value in mapping.values())
+        used.update(Path(value).name for value in mapping.values() if 'shared-assets/' in value)
     for file in shared.glob('*.png'):
         if file.name not in used:file.unlink()
     print(f'Shared plot assets: {len(used)} unique images',flush=True)

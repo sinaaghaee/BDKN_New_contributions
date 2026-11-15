@@ -1,0 +1,46 @@
+{
+  "default": "steps-lr001-r0001",
+  "datasets": {
+    "steps": {
+      "label": "Smoothed steps",
+      "formula": "f(x) = 0.3 [1 \u2212 \u03c3(200(x + 0.6))]\n     + 0.9 [\u03c3(200(x + 0.6)) \u2212 \u03c3(200x)]\n     \u2212 0.6 [\u03c3(200x) \u2212 \u03c3(200(x \u2212 0.4))]\n     + 0.01 sin(50 sin(10x))\n\n\u03c3(z) = 1 / (1 + exp(\u2212z))\nx ~ Uniform(\u22121, 1)\ny = f(x) + \u03b5,   \u03b5 ~ Normal(0, 0.01) [variance]\nNoise standard deviation = 0.1"
+    }
+  },
+  "experiments": [
+    {
+      "id": "steps-lr001-r0001",
+      "dataset": "steps",
+      "learning_rate": 0.001,
+      "repulsion": 0.001,
+      "run": "results/timed_baseline"
+    },
+    {
+      "id": "steps-lr001-r001",
+      "dataset": "steps",
+      "learning_rate": 0.001,
+      "repulsion": 0.01,
+      "run": "results/timed_repulsion_001"
+    },
+    {
+      "id": "steps-lr001-r01",
+      "dataset": "steps",
+      "learning_rate": 0.001,
+      "repulsion": 0.1,
+      "run": "results/timed_repulsion_01"
+    },
+    {
+      "id": "steps-lr001-r1",
+      "dataset": "steps",
+      "learning_rate": 0.001,
+      "repulsion": 1,
+      "run": "results/timed_repulsion_1"
+    },
+    {
+      "id": "steps-lr001-r10",
+      "dataset": "steps",
+      "learning_rate": 0.001,
+      "repulsion": 10,
+      "run": "results/timed_repulsion_10"
+    }
+  ]
+}

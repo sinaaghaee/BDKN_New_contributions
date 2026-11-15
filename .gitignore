@@ -259,3 +259,8 @@ Desktop.ini
 *~
 *.swp
 *.swo
+
+# Generated experiment artifacts
+/data/
+/results/
+/.cache/

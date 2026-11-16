@@ -130,28 +130,25 @@ def plot(stats,data,heads,ym,ys,function_corr,destination):
     for ax in axes:ax.grid(alpha=.12)
     fig.suptitle('Exact Student-t coefficient marginals · shaded 95% credible intervals')
     save(fig,destination,'densities')
-    fig,axes=plt.subplots(1,2,figsize=(11,4.5))
-    for ax,matrix,title in zip(axes,[stats['correlation'],function_corr],['Posterior coefficient correlation','Training-function correlation']):
-        cmap=plt.get_cmap('coolwarm').copy();cmap.set_bad('#dddddd')
-        im=ax.imshow(np.ma.masked_invalid(matrix),vmin=-1,vmax=1,cmap=cmap)
-        ax.set(xticks=range(h),xticklabels=range(1,h+1),yticks=range(h),yticklabels=range(1,h+1),xlabel='Network',ylabel='Network',title=title)
-        for i in range(h):
-            for j in range(h):ax.text(j,i,f'{matrix[i,j]:.2f}' if np.isfinite(matrix[i,j]) else '—',ha='center',va='center',fontsize=8)
-        fig.colorbar(im,ax=ax,fraction=.046,pad=.04)
-    save(fig,destination,'correlations')
-    grid=data['x_grid'].reshape(-1);pred=ym+ys*(heads['grid']@stats['mean'])
+    plot_predictions(data,ym+ys*(heads['grid']@stats['mean']),ym+ys*heads['grid'],ys*heads['grid']*stats['mean'][None,:],destination)
+
+
+def plot_predictions(data,pred,head_means,contributions,destination):
+    """Individual predictions and posterior-mean weighted contributions."""
+    grid=data['x_grid'].reshape(-1);h=head_means.shape[1]
     for mode,suffix in [('train',''),('test','_test'),('both','_both'),('none','_none')]:
         fig,axes=plt.subplots(2,1,figsize=(10,7),sharex=True)
         for i in range(h):
-            axes[0].plot(grid,ym+ys*heads['grid'][:,i],color=colors[i],lw=1,alpha=.8,label=labels[i])
-            axes[1].plot(grid,ys*heads['grid'][:,i]*stats['mean'][i],color=colors[i],lw=1,label=f'β{i+1} mean × feature {i+1}')
+            axes[0].plot(grid,head_means[:,i],color=COLORS[i],lw=1,alpha=.8,label=f'Network {i+1}')
+            axes[1].plot(grid,contributions[:,i],color=COLORS[i],lw=1,label=f'β{i+1} mean × feature {i+1}')
         axes[0].plot(grid,data['f_grid'].reshape(-1),'k--',lw=1,label='True function')
-        axes[0].plot(grid,ym+ys*heads['grid'].mean(axis=1),color='.4',ls=':',lw=2,label='DE mean')
+        axes[0].plot(grid,head_means.mean(axis=1),color='.4',ls=':',lw=2,label='DE mean')
         axes[0].plot(grid,pred,color='black',lw=1.8,label='BDKN mean')
-        axes[1].plot(grid,pred,color='black',lw=1.8,label='Sum + target offset')
+        axes[1].plot(grid,pred,color='black',lw=1.8,label='Sum')
         for mode_key,color,size,alpha in [('train','#172033',12,.45),('test','#b36a30',6,.25)]:
             if mode in (mode_key,'both'):axes[0].scatter(data['x_'+mode_key],data['y_'+mode_key],color=color,s=size,alpha=alpha,label=mode_key.capitalize()+' observations')
-        axes[0].set(title='Individual networks and combined predictions',ylabel='y');axes[1].set(title='Posterior-mean contributions to the combined prediction',xlabel='x',ylabel='Contribution in target units')
+        axes[0].set(title='Individual networks and combined predictions',ylabel='y')
+        axes[1].set(title='Posterior-mean contributions to the combined prediction',xlabel='x',ylabel='Contribution in target units')
         for ax in axes:ax.set_xlim(grid.min(),grid.max());ax.grid(alpha=.12);ax.legend(fontsize=7,ncol=3)
         save(fig,destination,'functions'+suffix)
 
@@ -189,13 +186,14 @@ def render(ctx):
     if not index_path.exists():return
     index=json.loads(index_path.read_text());prefix='' if not entry['directory'] else '../../'
     mapping_path=output/'asset-map.js';mapping=json.loads(mapping_path.read_text().split('=',1)[1].strip().removesuffix(';')) if mapping_path.exists() else {}
-    body='<section><h2>Aggregation weights</h2>'+choices('aggregation-method','BDKN variant',[('all','All')]+[(m,ctx['names'][m]) for m in METHODS],'bdkn')+observation_controls()+latex(r'\widehat y(x)=y_{\rm mean}+y_{\rm std}\sum_{h=1}^{H}\beta_h\mu_h(x)')+'<p class="note">Coefficients can be negative and need not sum to one. Intervals describe coefficient uncertainty; the dashed reference is DE’s fixed 1/H weight.</p></section>'
+    mapping={key:value for key,value in mapping.items() if not (key.startswith('assets/aggregation_') and key.endswith('_correlations.png'))}
+    body='<section><h2>Aggregation weights</h2>'+choices('aggregation-method','BDKN variant',[('all','All')]+[(m,ctx['names'][m]) for m in METHODS],'bdkn')+observation_controls()+'<p class="note">Coefficients can be negative and need not sum to one. Intervals describe coefficient uncertainty; the dashed reference is DE’s fixed 1/H weight.</p></section>'
     for method in METHODS:
         digest=index[entry['id']][method];folder=root/'aggregation-assets'/digest;stats=json.loads((folder/'statistics.json').read_text())
-        for name in ['coefficients','densities','correlations','functions','functions_test','functions_both','functions_none']:
+        for name in ['coefficients','densities','functions','functions_test','functions_both','functions_none']:
             mapping['assets/aggregation_'+method+'_'+name+'.png']=prefix+'aggregation-assets/'+digest+'/'+name+'.png'
         body+='<section id="aggregation-'+method+'" data-aggregation-method="'+method+'"'+(' hidden' if method!='bdkn' else '')+'><h2>'+ctx['names'][method]+'</h2><div class="gallery">'
-        for name,caption,wide,obs in [('coefficients','Posterior mean and 95% coefficient intervals',False,False),('correlations','Coefficient and function correlations',False,False),('densities','Coefficient distributions · conditional prior and exact Student-t posterior',True,False),('functions','Individual networks and their weighted contributions',True,True)]:
+        for name,caption,wide,obs in [('coefficients','Posterior mean and 95% coefficient intervals',False,False),('densities','Coefficient distributions · conditional prior and exact Student-t posterior',True,False),('functions','Individual networks and their weighted contributions',True,True)]:
             body+=image('aggregation_'+method+'_'+name+'.png',caption,wide,obs)
         body+='</div><p class="note">Each density panel uses its own X range for readability; coefficient intervals above share a common axis. Prior reference conditions on fitted noise. Contribution shares use held-out inputs; test targets are used only for scoring.</p><div class="table-wrap"><table><thead><tr><th>Network</th><th>β mean</th><th>95% low</th><th>95% high</th><th>P(β &gt; 0)</th><th>Contribution share</th><th>Test RMSE</th><th>Test NLL</th></tr></thead><tbody>'
         for row in stats['rows']:

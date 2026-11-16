@@ -28,4 +28,4 @@ Loss definitions are organized method by method, with LaTeX equations and concis
 
 Training setting buttons now compare the existing low/long setting with High LR 0.1 / 40 epochs. High applies to every method, including GP; Bayesian aggregation remains 100 steps. Each setting covers all ten datasets and five weights.
 
-Aggregation weights reads the saved training posterior, showing Student-t marginals, intervals, correlations, and functions/contributions for each BDKN variant. Observation switches affect function panels, while the same training-derived coefficient posterior is retained. Coefficients are unconstrained; contribution shares are descriptive summaries rather than probabilities.
+Aggregation weights reads the saved training posterior, showing Student-t marginals, intervals, and functions/contributions for each BDKN variant. Observation switches affect function panels, while the same training-derived coefficient posterior is retained. Coefficients are unconstrained; contribution shares are descriptive summaries rather than probabilities.

@@ -39,27 +39,25 @@ if(globalThis.katex)document.querySelectorAll('[data-tex]').forEach(element=>kat
 const catalogNode=document.getElementById('experiment-catalog');
 if(catalogNode){
  const state=JSON.parse(catalogNode.textContent),entries=state.experiments;
- const datasetSelect=document.getElementById('dataset-select'),lrSelect=document.getElementById('lr-select'),strengthSelect=document.getElementById('strength-select');
+ entries.forEach(entry=>entry.repulsion_location??='training');
+ const datasetSelect=document.getElementById('dataset-select'),lrSelect=document.getElementById('lr-select'),strengthSelect=document.getElementById('strength-select'),locationSelect=document.getElementById('location-select');
  function rateLabel(value){return value==='0.1'?'High · LR 0.1 · 40 epochs':value==='0.001'?'Low · NN LR 0.001':value;}
- function fill(select,values,preferred){select.replaceChildren(...values.map(value=>{const option=document.createElement('button');option.type='button';option.dataset.value=value;option.textContent=select===lrSelect?rateLabel(value):value;return option}));select.value=values.includes(preferred)?preferred:values[0];select.dataset.value=select.value;select.querySelectorAll('button[data-value]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.value===select.value)));}
+ function fill(select,values,preferred){select.replaceChildren(...values.map(value=>{const option=document.createElement('button');option.type='button';option.dataset.value=value;option.textContent=select===lrSelect?rateLabel(value):select===locationSelect?({training:'Training',random:'Random',combined:'Training + random'}[value]||value):value;return option}));select.value=values.includes(preferred)?preferred:values[0];select.dataset.value=select.value;select.querySelectorAll('button[data-value]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.value===select.value)));}
  function switchExperiment(changed){
-  if(state.page==='index.html'){
-   const available=entries.filter(entry=>entry.learning_rate===lrSelect.value);
-   if(changed!=='strength')fill(strengthSelect,[...new Set(available.map(entry=>entry.repulsion))].sort((a,b)=>Number(a)-Number(b)),strengthSelect.value);
-   const matching=available.filter(entry=>entry.repulsion===strengthSelect.value),activeDataset=entries.find(entry=>entry.id===state.active).dataset;
-   const target=matching.find(entry=>entry.dataset===activeDataset)||matching[0];
-   if(target)location.assign(state.root+target.directory+state.page+location.hash);
-   return;
-  }
-  const dataset=datasetSelect.value;
-  const candidates=entries.filter(entry=>entry.dataset===dataset),previousLR=lrSelect.value,previousStrength=strengthSelect.value;
-  if(changed==='dataset')fill(lrSelect,[...new Set(candidates.map(entry=>entry.learning_rate))].sort((a,b)=>Number(a)-Number(b)),previousLR);
-  const available=candidates.filter(entry=>entry.learning_rate===lrSelect.value);
-  if(changed!=='strength')fill(strengthSelect,[...new Set(available.map(entry=>entry.repulsion))].sort((a,b)=>Number(a)-Number(b)),previousStrength);
-  const target=available.find(entry=>entry.repulsion===strengthSelect.value);
+  const overview=state.page==='index.html',active=entries.find(entry=>entry.id===state.active);
+  const dataset=overview?active.dataset:datasetSelect.value;
+  const candidates=overview?entries:entries.filter(entry=>entry.dataset===dataset);
+  if(changed==='dataset')fill(lrSelect,[...new Set(candidates.map(entry=>entry.learning_rate))].sort((a,b)=>Number(a)-Number(b)),lrSelect.value);
+  const atRate=candidates.filter(entry=>entry.learning_rate===lrSelect.value);
+  if(locationSelect)fill(locationSelect,['training','random','combined'].filter(value=>atRate.some(entry=>entry.repulsion_location===value)),locationSelect.value);
+  const available=atRate.filter(entry=>entry.repulsion_location===(locationSelect?.value||'training'));
+  if(changed!=='strength')fill(strengthSelect,[...new Set(available.map(entry=>entry.repulsion))].sort((a,b)=>Number(a)-Number(b)),strengthSelect.value);
+  const matching=available.filter(entry=>entry.repulsion===strengthSelect.value);
+  const target=matching.find(entry=>entry.dataset===dataset)||matching[0];
   if(target)location.assign(state.root+target.directory+state.page+location.hash);
  }
  datasetSelect.addEventListener('change',()=>switchExperiment('dataset'));
  lrSelect.addEventListener('change',()=>switchExperiment('lr'));
  strengthSelect.addEventListener('change',()=>switchExperiment('strength'));
+ if(locationSelect)locationSelect.addEventListener('change',()=>switchExperiment('location'));
 }

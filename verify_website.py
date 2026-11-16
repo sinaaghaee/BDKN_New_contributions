@@ -45,7 +45,7 @@ def verify_fits(registry):
         run=Path(entry['run']);manifest=suite.read_json(run/'run.json');data=Path(manifest['data'])
         assert not suite.read_json(run/'failures.json'),run
         for method in suite.METHODS:
-            assert suite.validate_fit(run/method,method,data,entry.get('epochs'),float(entry['learning_rate']),float(entry['repulsion']),entry.get('gp_learning_rate')),(entry['id'],method)
+            assert suite.validate_fit(run/method,method,data,entry.get('epochs'),float(entry['learning_rate']),float(entry['repulsion']),entry.get('gp_learning_rate'),entry['repulsion_location']),(entry['id'],method)
             checked+=1
             from scipy.stats import norm, t
             for row in suite.read_json(run/method/'metrics.json'):
@@ -57,8 +57,8 @@ def verify_fits(registry):
                     kwargs={} if row['predictive_family']=='gaussian' else dict(df=float(prediction['df']))
                     nll=float(-distribution.logpdf(truth,loc=prediction['test_mean'],scale=prediction['test_scale'],**kwargs).mean())
                     np.testing.assert_allclose([row['rmse'],row['nll']],[rmse,nll],rtol=1e-9,atol=1e-9)
-            if method not in suite.REPULSIVE:
-                key=(entry['dataset'],entry['learning_rate'],method)
+            if method not in ('frde','forde'):
+                key=(entry['dataset'],entry['learning_rate'],method,entry['repulsion'] if method=='wrde' else None)
                 digest=suite.file_hash(run/method/'metrics.json')
                 assert common.setdefault(key,digest)==digest,(entry['id'],method,'baseline changed across weights')
         bdkn=suite.read_json(run/'bdkn/metrics.json')[0];de=suite.read_json(run/'deep_ensemble/metrics.json')[0]
@@ -84,7 +84,7 @@ def verify(root,registry,fixture=None):
             for group in ('loss-xscale','loss-yscale'):
                 if group in parsed.groups:assert parsed.groups[group]['value']=='log',(file,group)
             if file.name=='index.html':
-                matching=[e for e in registry['experiments'] if e['learning_rate']==entry['learning_rate'] and e['repulsion']==entry['repulsion']]
+                matching=[e for e in registry['experiments'] if e['learning_rate']==entry['learning_rate'] and e['repulsion']==entry['repulsion'] and e['repulsion_location']==entry['repulsion_location']]
                 assert len(parsed.tables)==3,file
                 for table in parsed.tables:
                     assert len(table['rows'])==len(matching)+1,(file,table['metric'])
@@ -99,12 +99,13 @@ def verify(root,registry,fixture=None):
                         from report_ui import metric_color
                         for cell,value in zip(row[1:],values):assert cell['style']=='background:'+metric_color(value,values)
         assert (folder/'report_manifest.json').is_file(),folder
+        assert json.loads((folder/'report_manifest.json').read_text()).get('repulsion_location','training')==entry['repulsion_location'],folder
     with (root/'downloads/all_results.csv').open() as f:rows=list(csv.DictReader(f))
     assert len(rows)==len(registry['experiments'])*12
     if fixture:
         # The browser control harness uses a complete real profile and actual assets.
         selected=next((e for e in registry['experiments'] if e['dataset']=='he'),registry['experiments'][0])
-        folder=root/selected['directory'];texts={name:(folder/name).read_text() for name in ('index.html','figures.html','losses.html','repulsion.html','aggregation.html')}
+        folder=root/selected['directory'];texts={name:(folder/name).read_text() for name in ('index.html','figures.html','losses.html','repulsion.html','aggregation.html','locations.html')}
         objects={name:Page(text) for name,text in texts.items()}
         state=lambda text:json.loads(re.search(r'<script id="experiment-catalog" type="application/json">(.*?)</script>',text).group(1))
         Path(fixture).write_text(json.dumps(dict(root=str(folder.resolve()),states={name:state(text) for name,text in texts.items()},groups={name:p.groups for name,p in objects.items()},images={name:p.images for name,p in objects.items()},math=sorted(all_math))))

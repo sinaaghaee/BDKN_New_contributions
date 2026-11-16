@@ -51,7 +51,7 @@ def relative(path):
 
 
 
-def make_history_plots(records, method, save):
+def make_history_plots(records, method, save, reuse=None):
     """Keep both training stages and preserve negative losses on signed-log axes."""
     groups=[]
     if 'stage' in records[0]:
@@ -81,6 +81,7 @@ def make_history_plots(records, method, save):
         log_y_scale='log' if np.all(values>0) else 'symlog'
         caption=NAMES.get(method,method)+' · '+stage
         for xlog,ylog,suffix in ((False,False,''),(True,False,'_xlog'),(False,True,'_ylog'),(True,True,'_xylog')):
+            if reuse and reuse(name+suffix+'.png'):continue
             fig,ax=plt.subplots(figsize=(8,3.5))
             for label,y in curves:
                 ax.plot(x,y,label=label)
@@ -95,6 +96,21 @@ def make_history_plots(records, method, save):
             save(fig,name+suffix+'.png')
         charts.append(dict(method=method,name=name,caption=caption,log_y_scale=log_y_scale,points=len(group),stage=stage))
     return charts
+
+
+def plot_key(expected,name,prediction_hashes,history_hashes,rows):
+    if name.startswith('data.'):signature=expected
+    elif 'history' in name:
+        method=next(key for key in sorted(history_hashes,key=len,reverse=True) if name.startswith(key+'_'));signature=history_hashes[method]
+    elif name.startswith('all_models'):signature=json.dumps(prediction_hashes,sort_keys=True)
+    elif '_pair' in name:
+        key=name.split('_pair')[0];signature=prediction_hashes[key]+prediction_hashes['deep_ensemble' if key=='bdkn' else key+'_ensemble']
+    elif name.startswith('metrics.'):signature=json.dumps(rows,sort_keys=True)
+    else:
+        key=next(key for key in sorted(prediction_hashes,key=len,reverse=True) if name.startswith(key+'.') or name.startswith(key+'_'))
+        signature=prediction_hashes[key]
+    cache_key=(expected,name,signature)
+    return cache_key
 
 
 def build_run(run, output, registry, entry, ui_only=False):
@@ -119,9 +135,12 @@ def build_run(run, output, registry, entry, ui_only=False):
     lookup={r['method']:r for r in rows}
     if not np.isclose(configs['bdkn']['lr'],float(entry['learning_rate'])):
         raise ValueError('Learning-rate label does not match saved BDKN configuration')
+    for method in ('frde','forde'):
+        if configs[method].get('repulsion_location','training')!=entry['repulsion_location']:raise ValueError('Repulsion location does not match saved configuration')
     for method in ('frde','wrde','forde'):
         if not np.isclose(configs[method]['repulsion_strength'],float(entry['repulsion'])):
             raise ValueError('Repulsion label does not match saved configuration')
+    ui_only=ui_only and (output/'report_manifest.json').exists()
     if ui_only:
         manifest=json.loads((output/'report_manifest.json').read_text())
         if manifest['dataset_sha256']!=expected or manifest['experiment_id']!=entry['id']:
@@ -135,6 +154,8 @@ def build_run(run, output, registry, entry, ui_only=False):
         context=dict(output=output,registry=registry,entry=entry,names=NAMES,pairs=PAIRS,rows=rows,
                      configs=configs,data=data,predictions=predictions,histories=manifest['history_charts'],dataset_hash=expected,ui_only=True)
         render_report(context)
+        manifest['repulsion_location']=entry['repulsion_location']
+        (output/'report_manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
         (output/'style.css').write_text(CSS);(output/'report.js').write_text(JS.strip()+'\n')
         shutil.copy2(ROOT/'provenance.json',output/'downloads/provenance.json')
         print('Refreshed '+entry['id'],flush=True)
@@ -170,26 +191,23 @@ def build_run(run, output, registry, entry, ui_only=False):
     history_hashes={key:hashlib.sha256((run/key/'history.csv').read_bytes()).hexdigest() for key in configs if (run/key/'history.csv').exists()}
     def save(fig,name):
         # Repeated weight profiles share baseline plots and histories.
-        if name.startswith('data.'):signature=expected
-        elif 'history' in name:
-            method=next(key for key in sorted(history_hashes,key=len,reverse=True) if name.startswith(key+'_'));signature=history_hashes[method]
-        elif name.startswith('all_models'):signature=json.dumps(prediction_hashes,sort_keys=True)
-        elif '_pair' in name:
-            key=name.split('_pair')[0];signature=prediction_hashes[key]+prediction_hashes['deep_ensemble' if key=='bdkn' else key+'_ensemble']
-        elif name.startswith('metrics.'):signature=json.dumps(rows,sort_keys=True)
-        else:
-            key=next(key for key in sorted(predictions,key=len,reverse=True) if name.startswith(key+'.') or name.startswith(key+'_'))
-            signature=prediction_hashes[key]
-        cache_key=(expected,name,signature)
+        cache_key=plot_key(expected,name,prediction_hashes,history_hashes,rows)
         previous=_PLOT_CACHE.get(cache_key)
-        if previous and previous.is_file():shutil.copy2(previous,assets/name)
+        if previous and previous.is_file():shutil.copy2(previous,assets/name) if previous.resolve()!=(assets/name).resolve() else None
         else:
             fig.tight_layout();fig.savefig(assets/name,dpi=140,bbox_inches='tight')
             _PLOT_CACHE[cache_key]=assets/name
         plt.close(fig)
+    def reuse(name):
+        previous=_PLOT_CACHE.get(plot_key(expected,name,prediction_hashes,history_hashes,rows))
+        if previous and previous.is_file():
+            shutil.copy2(previous,assets/name) if previous.resolve()!=(assets/name).resolve() else None
+            return True
+        return False
     # Pre-render observation layers so the switches also work without a server.
     for observations,suffix in (('train',''),('test','_test'),('both','_both'),('none','_none')):
         for name in NAMES:
+            if reuse(name+suffix+'.png'):continue
             fig,ax=plt.subplots(figsize=(8,4));base(ax,observations);draw(ax,name);ax.legend(fontsize=7)
             ax.set_title(f"{NAMES[name]} | RMSE {lookup[name]['rmse']:.4f} | NLL {lookup[name]['nll']:.4f}")
             own_lo=min(float(predictions[name]['grid_lower'].min()),float(data['y_train'].min()),float(data['y_test'].min()))
@@ -197,12 +215,14 @@ def build_run(run, output, registry, entry, ui_only=False):
             own_pad=.04*max(own_hi-own_lo,1.)
             ax.set_ylim(own_lo-own_pad,own_hi+own_pad)
             save(fig,name+suffix+'.png')
-        fig,axes=plt.subplots(4,3,figsize=(17,14),sharex=True,sharey=True)
-        for ax,name in zip(axes.flat,NAMES):
-            base(ax,observations);draw(ax,name);ax.set_title(NAMES[name],fontsize=10)
-        fig.suptitle('All methods · '+observations+' observations · 95% predictive intervals',fontsize=15)
-        save(fig,'all_models'+suffix+'.png')
+        if not reuse('all_models'+suffix+'.png'):
+            fig,axes=plt.subplots(4,3,figsize=(17,14),sharex=True,sharey=True)
+            for ax,name in zip(axes.flat,NAMES):
+                base(ax,observations);draw(ax,name);ax.set_title(NAMES[name],fontsize=10)
+            fig.suptitle('All methods · '+observations+' observations · 95% predictive intervals',fontsize=15)
+            save(fig,'all_models'+suffix+'.png')
         for label,de,bayesian in PAIRS:
+            if reuse(bayesian+'_pair'+suffix+'.png'):continue
             fig,ax=plt.subplots(figsize=(9,4.5));base(ax,observations);draw(ax,de,'#4776b2','DE');draw(ax,bayesian,'#cc732f','BDKN');ax.legend(fontsize=8,ncol=2);ax.set_title(label+' · ensemble versus Bayesian aggregation')
             pair_lo=min(float(predictions[k]['grid_lower'].min()) for k in (de,bayesian))
             pair_hi=max(float(predictions[k]['grid_upper'].max()) for k in (de,bayesian))
@@ -235,7 +255,7 @@ def build_run(run, output, registry, entry, ui_only=False):
         with history.open() as handle: records=list(csv.DictReader(handle))
         if not records: continue
         shutil.copy2(history, downloads/(method+'_history.csv'))
-        history_figures.extend(make_history_plots(records, method, save))
+        history_figures.extend(make_history_plots(records, method, save, reuse))
     if not np.isclose(configs['bdkn']['lr'],float(entry['learning_rate'])):
         raise ValueError('Learning-rate label does not match saved BDKN configuration')
     for method in ('frde','wrde','forde'):
@@ -244,7 +264,7 @@ def build_run(run, output, registry, entry, ui_only=False):
     context=dict(output=output,registry=registry,entry=entry,names=NAMES,pairs=PAIRS,
                  rows=rows,configs=configs,data=data,predictions=predictions,histories=history_figures,dataset_hash=expected)
     render_report(context)
-    (output/'report_manifest.json').write_text(json.dumps(dict(dataset_sha256=expected,methods=list(configs),predictions=list(NAMES),history_charts=history_figures,observation_modes=['train','test','both','none'],device=run_config['device'],experiment_id=entry['id'],source_prediction_sha256=prediction_hashes,source_history_sha256=history_hashes,generated_at=datetime.now(timezone.utc).isoformat()),indent=2)+'\n')
+    (output/'report_manifest.json').write_text(json.dumps(dict(dataset_sha256=expected,methods=list(configs),predictions=list(NAMES),history_charts=history_figures,observation_modes=['train','test','both','none'],device=run_config['device'],experiment_id=entry['id'],repulsion_location=entry['repulsion_location'],source_prediction_sha256=prediction_hashes,source_history_sha256=history_hashes,generated_at=datetime.now(timezone.utc).isoformat()),indent=2)+'\n')
     print(f'Built {entry["id"]}: {output}/index.html',flush=True)
     return expected
 
@@ -256,16 +276,37 @@ def write_overview_download(output,registry):
             if folder.is_dir() and (folder/'metrics.json').exists():
                 for row in json.loads((folder/'metrics.json').read_text()):
                     cfg=json.loads((folder/'config.json').read_text())
-                    combined.append(dict(dataset=entry['dataset'],nn_learning_rate=entry['learning_rate'],method_learning_rate=cfg['lr'],epochs=cfg['epochs'],repulsion=entry['repulsion'],**row))
+                    combined.append(dict(dataset=entry['dataset'],nn_learning_rate=entry['learning_rate'],method_learning_rate=cfg['lr'],epochs=cfg['epochs'],repulsion=entry['repulsion'],repulsion_location=entry['repulsion_location'],**row))
     (output/'downloads').mkdir(exist_ok=True)
     with (output/'downloads/all_results.csv').open('w',newline='') as handle:
         writer=csv.DictWriter(handle,fieldnames=list(combined[0]));writer.writeheader();writer.writerows(combined)
+
+
+def build_dataset(args):
+    registry,output,entries,ui_only=args;output=Path(output)
+    for entry in entries:
+        folder=output/entry['directory'];manifest_path=folder/'report_manifest.json';map_path=folder/'asset-map.js'
+        if not manifest_path.exists() or not map_path.exists():continue
+        manifest=json.loads(manifest_path.read_text());mapping=json.loads(map_path.read_text().split('=',1)[1].strip().removesuffix(';'))
+        for logical,target in mapping.items():
+            name=Path(logical).name
+            if not logical.startswith('assets/') or name.startswith(('weight_','aggregation_','location_','metrics')):continue
+            try:key=plot_key(manifest['dataset_sha256'],name,manifest['source_prediction_sha256'],manifest['source_history_sha256'],[])
+            except (KeyError,StopIteration):continue
+            candidate=(folder/target).resolve()
+            if candidate.is_file():_PLOT_CACHE[key]=candidate
+    hashes=set()
+    for entry in entries:
+        hashes.add(build_run(Path(entry['run']),output/entry['directory'],registry,entry,ui_only))
+    if len(hashes)!=1:raise ValueError('Runs under one dataset label must use identical data')
+    return len(entries)
 
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--registry',default=REGISTRY_PATH,help='Dataset, LR, strength, and completed-run registry')
     parser.add_argument('--aggregation-workers',type=int,default=2,help='CPU workers for saved-posterior diagnostics')
+    parser.add_argument('--workers',type=int,default=1,help='Parallel dataset report builders')
     parser.add_argument('--ui-only',action='store_true',help='Refresh tables, controls and equations using existing validated report figures')
     parser.add_argument('--learning-rate',type=float,help='Render only this registered learning-rate setting')
     parser.add_argument('--datasets',nargs='+',help='Render only these dataset IDs while retaining the full overview registry')
@@ -280,13 +321,24 @@ def main():
     shutil.copytree(ROOT/'website/vendor',output/'vendor',dirs_exist_ok=True)
     from aggregation_report import generate as generate_aggregation
     generate_aggregation(registry,output,args.aggregation_workers)
-    hashes={}
+    groups={}
     for entry in registry['experiments']:
         if args.datasets and entry['dataset'] not in args.datasets:continue
         if args.learning_rate is not None and float(entry['learning_rate'])!=args.learning_rate:continue
-        result=build_run(Path(entry['run']),output/entry['directory'],registry,entry,args.ui_only)
-        previous=hashes.setdefault(entry['dataset'],result)
-        if result!=previous:raise ValueError('Runs under one dataset label must use identical data')
+        groups.setdefault(entry['dataset'],[]).append(entry)
+    jobs=[(registry,str(output),entries,args.ui_only) for entries in groups.values()]
+    if args.workers==1:
+        for job in jobs:build_dataset(job)
+    else:
+        from concurrent.futures import ProcessPoolExecutor
+        import multiprocessing
+        with ProcessPoolExecutor(max_workers=args.workers,mp_context=multiprocessing.get_context('spawn')) as pool:
+            list(pool.map(build_dataset,jobs))
+    deduplicate_assets(output,registry)
+    from location_report import generate as generate_locations, render_all as render_location_pages, prune_unused as prune_locations
+    location_index=generate_locations(registry,output)
+    render_location_pages(registry,output,location_index)
+    prune_locations(output,location_index)
     write_overview_download(output,registry)
     if args.ui_only or not args.datasets:deduplicate_assets(output,registry)
     print(f'Website: {output}/index.html · {len(registry["experiments"])} experiments')

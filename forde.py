@@ -33,6 +33,7 @@ CONFIG = {
     'bll_dtype': 'float64',  # Original float64/SVD Bayesian-stage numerical path.
     'stage2_steps': 100,  # Original Bayesian-stage optimization budget.
     'stage2_lr': 0.1,  # Adam learning rate for the Bayesian prior variance.
+    'repulsion_location': 'training',  # training, random, or combined; random points redraw each step.
     'repulsion_strength': 0.001,  # Existing repulsion coefficient; zero reproduces the original ensemble.
     'repulsion_bandwidth_floor': 1e-06,  # Original minimum KDE bandwidth.
     'repulsion_normalization_eps': 1e-08,  # Original FoRDE input-gradient normalization epsilon.
@@ -741,7 +742,7 @@ def validate_settings(strength, bandwidth_floor, normalization_eps=1e-8):
     return strength, bandwidth_floor, normalization_eps
 
 
-def repulsion_metadata(strength, bandwidth_floor, normalization_eps=1e-8):
+def repulsion_metadata(strength, bandwidth_floor, normalization_eps=1e-8, location="training"):
     strength, bandwidth_floor, normalization_eps = validate_settings(strength, bandwidth_floor, normalization_eps)
     return {
         "method": "FoRDE",
@@ -749,8 +750,8 @@ def repulsion_metadata(strength, bandwidth_floor, normalization_eps=1e-8):
         "repulsion_bandwidth_floor": bandwidth_floor,
         "repulsion_normalization_eps": normalization_eps,
         "repulsion_space": "normalized_mean_input_gradients",
-        "repulsion_input_coordinates": "preprocessed_training_inputs",
-        "repulsion_points": "first_head_training_minibatch",
+        "repulsion_input_coordinates": "preprocessed_inputs",
+        "repulsion_points": {"training":"first_head_training_minibatch", "random":"uniform_domain", "combined":"first_head_training_minibatch_and_uniform_domain"}[location],
         "repulsion_normalization": "pointwise_multifeature_or_whole_field_single_feature",
         "repulsion_reduction": "sum_heads_logsumexp_references_and_locations_minus_log_locations_div_locations",
         "repulsion_bandwidth": "median_query_networks_per_reference_and_location/log(H)",
@@ -828,7 +829,7 @@ def mean_input_gradients(ensemble, common_x):
 
 
 def stage1_objective(ensemble, batch_x, batch_y, strength=0.001,
-                     bandwidth_floor=1e-6, normalization_eps=1e-8):
+                     bandwidth_floor=1e-6, normalization_eps=1e-8, repulsion_x=None):
     strength, bandwidth_floor, normalization_eps = validate_settings(strength, bandwidth_floor, normalization_eps)
     mu, var = ensemble(batch_x)
     per_head_losses = gaussian_nll_batched(mu, var, batch_y)
@@ -839,7 +840,7 @@ def stage1_objective(ensemble, batch_x, batch_y, strength=0.001,
     objective = likelihood
     if strength > 0 and ensemble.n_nets > 1:
         regularizer, bandwidths, mean_distance = gradient_repulsive_kde(
-            mean_input_gradients(ensemble, batch_x[0]), bandwidth_floor, normalization_eps
+            mean_input_gradients(ensemble, batch_x[0] if repulsion_x is None else repulsion_x), bandwidth_floor, normalization_eps
         )
         bandwidth = bandwidths.mean()
         objective = likelihood + strength * regularizer
@@ -859,10 +860,12 @@ def experiment_setup():
     parser.add_argument("--device", default=CONFIG["device"])
     parser.add_argument("--epochs", type=int, help="Optional training-budget override for smoke tests")
     parser.add_argument("--learning-rate", type=float, help="Override the model learning rate")
+    parser.add_argument("--repulsion-location", choices=("training","random","combined"), default=CONFIG["repulsion_location"])
     parser.add_argument("--repulsion-strength", type=float, help="Override repulsion coefficient for repulsive methods")
     parser.add_argument("--reuse-stage1", help="BDKN stage1.pt to reuse; deep ensemble only")
     args = parser.parse_args()
     cfg = dict(CONFIG)
+    cfg["repulsion_location"] = args.repulsion_location
     if args.learning_rate is not None:
         if not np.isfinite(args.learning_rate) or args.learning_rate <= 0: parser.error("Learning rate must be finite and positive")
         cfg["lr"] = args.learning_rate
@@ -997,10 +1000,44 @@ def preprocess(data, cfg, device):
     return ({k:torch.tensor(v,dtype=torch.float32,device=device) for k,v in x.items()},
             torch.tensor(y,dtype=torch.float32,device=device),ym,ys)
 
+class RepulsionPointSampler:
+    """Independent CPU RNG; uniform domain draws, distinct from every train input.
+
+    Sampling in the affine-normalized 1D domain is equivalent to sampling in raw
+    coordinates. Duplicates are checked after conversion to model precision.
+    """
+    def __init__(self, train_x, grid_x, seed):
+        self.train=train_x.detach().cpu().reshape(-1).to(torch.float32)
+        self.low=float(grid_x.min());self.high=float(grid_x.max())
+        if not np.isfinite([self.low,self.high]).all() or self.low>=self.high:
+            raise ValueError("Repulsion domain must have finite, distinct bounds")
+        self.generator=torch.Generator(device='cpu').manual_seed(int(seed)+1729)
+
+    def sample(self, batch, location):
+        if location=='training':return batch
+        if location not in ('random','combined'):raise ValueError('Unknown repulsion location')
+        n=len(batch);accepted=torch.empty(0,dtype=batch.dtype,device='cpu')
+        forbidden=self.train.to(dtype=batch.dtype)
+        for _ in range(100):
+            draw=(self.low+(self.high-self.low)*torch.rand(max(2*n,8),generator=self.generator,dtype=torch.float64)).to(batch.dtype)
+            draw=draw[(draw>=self.low)&(draw<=self.high)]
+            draw=draw[~torch.isin(draw,forbidden)]
+            draw=draw[~torch.isin(draw,accepted)]
+            # Preserve draw order while rejecting duplicate representable values.
+            seen=set(accepted.tolist());new=[]
+            for value in draw.tolist():
+                if value not in seen:seen.add(value);new.append(value)
+            accepted=torch.cat((accepted,torch.tensor(new,dtype=batch.dtype)))[:n]
+            if len(accepted)==n:break
+        if len(accepted)!=n:raise RuntimeError('Cannot draw enough distinct repulsion points in this domain')
+        points=accepted.reshape(n,1).to(batch.device)
+        return points if location=='random' else torch.cat((batch,points),dim=0)
+
+
 # --- Training and comparison entrypoint ---
 
-def training_objective(ensemble,bx,by,cfg):
-    return stage1_objective(ensemble,bx,by,cfg["repulsion_strength"],cfg["repulsion_bandwidth_floor"],cfg["repulsion_normalization_eps"])
+def training_objective(ensemble,bx,by,cfg,repulsion_x=None):
+    return stage1_objective(ensemble,bx,by,cfg["repulsion_strength"],cfg["repulsion_bandwidth_floor"],cfg["repulsion_normalization_eps"],repulsion_x)
 
 # Stage-one reuse checks all settings that can change learned ensemble predictions.
 STAGE1_KEYS = ("seed", "epochs", "lr", "batch_size", "n_nets", "hidden_dim", "hidden_layers",
@@ -1008,7 +1045,7 @@ STAGE1_KEYS = ("seed", "epochs", "lr", "batch_size", "n_nets", "hidden_dim", "hi
 
 
 def stage1_signature(cfg):
-    return {key: cfg[key] for key in STAGE1_KEYS} | {"dataset_sha256":cfg["dataset_sha256"]}
+    return {key: cfg[key] for key in STAGE1_KEYS} | {"dataset_sha256":cfg["dataset_sha256"], "repulsion_location":cfg.get("repulsion_location","training"), "repulsion_strength":cfg["repulsion_strength"]}
 
 
 def can_reuse_stage1(artifact, cfg):
@@ -1020,6 +1057,12 @@ def can_reuse_stage1(artifact, cfg):
 def main():
     cfg,data,output,device=experiment_setup()
     x,y,ym,ys=preprocess(data,cfg,device)
+    sampler=RepulsionPointSampler(x['x_train'],x['x_grid'],cfg['seed'])
+    cfg['repulsion_sampling']=dict(location=cfg['repulsion_location'],domain_raw=[float(data['x_grid'].min()),float(data['x_grid'].max())],
+        domain_model=[sampler.low,sampler.high],random_seed=cfg['seed']+1729,redraw='optimizer_step',
+        random_count='actual_training_minibatch_size',exclude='all_training_inputs_and_duplicates',
+        point_count_multiplier=2 if cfg['repulsion_location']=='combined' else 1)
+    (output/'config.json').write_text(json.dumps(cfg,indent=2)+'\n')
     start=time.perf_counter(); history=[]
     ensemble=build_batched_ensemble(cfg["n_nets"],1,cfg["hidden_dim"],cfg["hidden_layers"],
                                     cfg["activation"],cfg["norm_type"],cfg["jitter_eps"],device)
@@ -1042,7 +1085,8 @@ def main():
             ensemble.train(); diagnostics=[]
             for bx,by in _iter_head_batches(x["x_train"],y,cfg["n_nets"],cfg["batch_size"]):
                 optimizer.zero_grad()
-                loss,_,diag=training_objective(ensemble,bx,by,cfg)
+                repulsion_x=sampler.sample(bx[0],cfg['repulsion_location']) if cfg['repulsion_strength']>0 and cfg['n_nets']>1 else None
+                loss,_,diag=training_objective(ensemble,bx,by,cfg,repulsion_x)
                 if not torch.isfinite(loss): raise FloatingPointError("Nonfinite training objective")
                 loss.backward(); optimizer.step(); diagnostics.append(diag.cpu().numpy())
             values=np.mean(diagnostics,axis=0)

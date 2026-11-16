@@ -99,3 +99,13 @@ python build_website.py
 The high preset runs all ten datasets and all five repulsion weights with **learning rate 0.1 and 40 epochs for every method, including GP, DKL, and LDBLL**. BDKN Bayesian aggregation retains 100 steps at learning rate 0.1. Results go to `results/suite_high`; data artifacts and the original low-rate results are reused without overwriting fitted models. The report’s Training setting buttons switch between low/long and high/40-epoch comparisons.
 
 Aggregation weights now has posterior means and marginal 95% Student-t intervals, exact coefficient densities, individual-network test scores, and weighted function contributions. All four BDKN variants are available across both training settings, all datasets, and all repulsion weights. These diagnostics read saved posteriors and checkpoints; they do not retrain models. Conditional prior density references use the fitted posterior mean noise variance.
+
+Repulsion locations can be compared with the `repulsion_location` setting in `frde.py` and `forde.py`: `training` (the original default), `random`, or `combined`. At each optimizer step, B is the actual first network’s training minibatch size (up to 32). Random mode draws B unique uniform points across the full plotting domain; combined mode uses the B training inputs plus those B random points. Random points exclude every training input in model precision and redraw each step using a separate seeded RNG. The likelihood still uses the original per-network training batches. Combined mode uses twice as many repulsion points, while all loss coefficients and kernel conventions stay unchanged.
+
+```bash
+python run_suite.py --repulsion-locations random combined --register
+python run_suite.py --preset high --repulsion-locations random combined --register
+python build_website.py --ui-only --workers 4
+```
+
+The suite reuses existing registered training references and fits only FRDE and FoRDE for each new location. Weight repulsion is input-independent; its existing DE/BDKN results and all other baselines are reused with their original training times. New runs are stored below each suite’s `locations/` directory and are resumable. The offline report adds Repulsion location buttons and a Compare locations page with aligned prediction panels, metrics, and both training stages. The first report build creates missing profile assets even with `--ui-only`; subsequent builds validate and reuse them.

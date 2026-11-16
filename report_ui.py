@@ -57,29 +57,27 @@ if(globalThis.katex)document.querySelectorAll('[data-tex]').forEach(element=>kat
 const catalogNode=document.getElementById('experiment-catalog');
 if(catalogNode){
  const state=JSON.parse(catalogNode.textContent),entries=state.experiments;
- const datasetSelect=document.getElementById('dataset-select'),lrSelect=document.getElementById('lr-select'),strengthSelect=document.getElementById('strength-select');
+ entries.forEach(entry=>entry.repulsion_location??='training');
+ const datasetSelect=document.getElementById('dataset-select'),lrSelect=document.getElementById('lr-select'),strengthSelect=document.getElementById('strength-select'),locationSelect=document.getElementById('location-select');
  function rateLabel(value){return value==='0.1'?'High · LR 0.1 · 40 epochs':value==='0.001'?'Low · NN LR 0.001':value;}
- function fill(select,values,preferred){select.replaceChildren(...values.map(value=>{const option=document.createElement('button');option.type='button';option.dataset.value=value;option.textContent=select===lrSelect?rateLabel(value):value;return option}));select.value=values.includes(preferred)?preferred:values[0];select.dataset.value=select.value;select.querySelectorAll('button[data-value]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.value===select.value)));}
+ function fill(select,values,preferred){select.replaceChildren(...values.map(value=>{const option=document.createElement('button');option.type='button';option.dataset.value=value;option.textContent=select===lrSelect?rateLabel(value):select===locationSelect?({training:'Training',random:'Random',combined:'Training + random'}[value]||value):value;return option}));select.value=values.includes(preferred)?preferred:values[0];select.dataset.value=select.value;select.querySelectorAll('button[data-value]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.value===select.value)));}
  function switchExperiment(changed){
-  if(state.page==='index.html'){
-   const available=entries.filter(entry=>entry.learning_rate===lrSelect.value);
-   if(changed!=='strength')fill(strengthSelect,[...new Set(available.map(entry=>entry.repulsion))].sort((a,b)=>Number(a)-Number(b)),strengthSelect.value);
-   const matching=available.filter(entry=>entry.repulsion===strengthSelect.value),activeDataset=entries.find(entry=>entry.id===state.active).dataset;
-   const target=matching.find(entry=>entry.dataset===activeDataset)||matching[0];
-   if(target)location.assign(state.root+target.directory+state.page+location.hash);
-   return;
-  }
-  const dataset=datasetSelect.value;
-  const candidates=entries.filter(entry=>entry.dataset===dataset),previousLR=lrSelect.value,previousStrength=strengthSelect.value;
-  if(changed==='dataset')fill(lrSelect,[...new Set(candidates.map(entry=>entry.learning_rate))].sort((a,b)=>Number(a)-Number(b)),previousLR);
-  const available=candidates.filter(entry=>entry.learning_rate===lrSelect.value);
-  if(changed!=='strength')fill(strengthSelect,[...new Set(available.map(entry=>entry.repulsion))].sort((a,b)=>Number(a)-Number(b)),previousStrength);
-  const target=available.find(entry=>entry.repulsion===strengthSelect.value);
+  const overview=state.page==='index.html',active=entries.find(entry=>entry.id===state.active);
+  const dataset=overview?active.dataset:datasetSelect.value;
+  const candidates=overview?entries:entries.filter(entry=>entry.dataset===dataset);
+  if(changed==='dataset')fill(lrSelect,[...new Set(candidates.map(entry=>entry.learning_rate))].sort((a,b)=>Number(a)-Number(b)),lrSelect.value);
+  const atRate=candidates.filter(entry=>entry.learning_rate===lrSelect.value);
+  if(locationSelect)fill(locationSelect,['training','random','combined'].filter(value=>atRate.some(entry=>entry.repulsion_location===value)),locationSelect.value);
+  const available=atRate.filter(entry=>entry.repulsion_location===(locationSelect?.value||'training'));
+  if(changed!=='strength')fill(strengthSelect,[...new Set(available.map(entry=>entry.repulsion))].sort((a,b)=>Number(a)-Number(b)),strengthSelect.value);
+  const matching=available.filter(entry=>entry.repulsion===strengthSelect.value);
+  const target=matching.find(entry=>entry.dataset===dataset)||matching[0];
   if(target)location.assign(state.root+target.directory+state.page+location.hash);
  }
  datasetSelect.addEventListener('change',()=>switchExperiment('dataset'));
  lrSelect.addEventListener('change',()=>switchExperiment('lr'));
  strengthSelect.addEventListener('change',()=>switchExperiment('strength'));
+ if(locationSelect)locationSelect.addEventListener('change',()=>switchExperiment('location'));
 }
 
 """
@@ -96,8 +94,10 @@ def load_registry(path, root):
         if entry['dataset'] not in datasets:raise ValueError('Unknown dataset: '+entry['dataset'])
         entry['learning_rate']=format(float(entry['learning_rate']),'.8g')
         entry['repulsion']=format(float(entry['repulsion']),'.8g')
-        key=(entry['dataset'],entry['learning_rate'],entry['repulsion'])
-        if key in keys:raise ValueError('Register only one active run for each dataset/LR/repulsion combination')
+        entry.setdefault('repulsion_location','training')
+        if entry['repulsion_location'] not in ('training','random','combined'):raise ValueError('Unknown repulsion location')
+        key=(entry['dataset'],entry['learning_rate'],entry['repulsion'],entry['repulsion_location'])
+        if key in keys:raise ValueError('Register only one active run for each dataset/LR/repulsion/location combination')
         keys.add(key)
         run=Path(entry['run']);entry['run']=str(run if run.is_absolute() else root/run)
     if registry['default'] not in ids:raise ValueError('The default experiment ID must be registered')
@@ -147,14 +147,16 @@ def observation_controls():
 
 def page(ctx,title,filename,body):
     entry=ctx['entry'];registry=ctx['registry'];prefix='' if not entry['directory'] else '../../'
-    catalog=[{k:e[k] for k in ['id','dataset','learning_rate','repulsion','directory']} for e in registry['experiments']]
+    catalog=[{k:e[k] for k in ['id','dataset','learning_rate','repulsion','repulsion_location','directory']} for e in registry['experiments']]
     datasets=registry['datasets']
     dataset_values=[(key,value['label']) for key,value in datasets.items() if any(e['dataset']==key for e in catalog)]
     rates=sorted({e['learning_rate'] for e in catalog if filename=='index.html' or e['dataset']==entry['dataset']},key=float)
     strengths=sorted({e['repulsion'] for e in catalog if (filename=='index.html' or e['dataset']==entry['dataset']) and e['learning_rate']==entry['learning_rate']},key=float)
     controls=choices('dataset-select','Dataset',[('all','All datasets')] if filename=='index.html' else dataset_values,'all' if filename=='index.html' else entry['dataset'],filename=='index.html')+choices('lr-select','Training setting',[(v,'High · LR 0.1 · 40 epochs' if v=='0.1' else 'Low · NN LR 0.001' if v=='0.001' else v) for v in rates],entry['learning_rate'])
     controls+=choices('strength-select','Repulsion weight',[('all','All weights')] if filename=='repulsion.html' else [(v,v) for v in strengths],'all' if filename=='repulsion.html' else entry['repulsion'],filename=='repulsion.html')
-    links=[('index.html','Results'),('figures.html','Predictions'),('de_bdkn_results.html','DE ↔ BDKN'),('repulsion.html','Compare weights'),('losses.html','Losses'),('aggregation.html','Aggregation weights'),('dataset.html','Data'),('settings.html','Settings')]
+    locations=[v for v in ('training','random','combined') if any(e['repulsion_location']==v and e['learning_rate']==entry['learning_rate'] and (filename=='index.html' or e['dataset']==entry['dataset']) for e in catalog)]
+    controls+=choices('location-select','Repulsion location',[(v,{'training':'Training','random':'Random','combined':'Training + random'}[v]) for v in locations],entry['repulsion_location'])
+    links=[('index.html','Results'),('figures.html','Predictions'),('de_bdkn_results.html','DE ↔ BDKN'),('repulsion.html','Compare weights'),('locations.html','Compare locations'),('losses.html','Losses'),('aggregation.html','Aggregation weights'),('dataset.html','Data'),('settings.html','Settings')]
     nav=''.join(f'<a href="{file}"'+(' aria-current="page"' if filename==file else '')+f'>{label}</a>' for file,label in links)
     state=json.dumps(dict(experiments=catalog,datasets={k:v['label'] for k,v in datasets.items()},active=entry['id'],root=prefix,page=filename)).replace('<','\\u003c')
     math_head=f'<link rel="stylesheet" href="{prefix}vendor/katex/katex.min.css">' if filename in ('losses.html','repulsion.html','dataset.html','aggregation.html') else ''
@@ -198,20 +200,20 @@ def loss_definitions():
             r'\mathcal L_2=-\log\Gamma(\alpha_n)+\alpha_n\log\beta_n-\frac12(\log|\Lambda_0|-\log|\Lambda_n|)+\frac n2\log(2\pi)'
         ],[(r'\Phi,\ n,\ y','Frozen ensemble feature matrix, training count, and target vector.'),(r'\sigma_p^2','Prior weight variance learned in stage two.'),(r'\Lambda_0,\Lambda_n,m_n','Prior precision, posterior precision, and posterior mean.'),(r'\alpha_0,\beta_0;\ \alpha_n,\beta_n','Inverse-gamma prior and posterior parameters; prior-only constants omitted from the plotted loss.')]),
         ('frde','Functional repulsion (FRDE)',[
-            r'\mathcal L_1=\mathcal L_{\mathrm{DE}}+\lambda R_{\mathrm F},\qquad z_i=(\mu_i(\widetilde x_b))_{b=1}^{B}',
+            r'\mathcal L_1=\mathcal L_{\mathrm{DE}}+\lambda R_{\mathrm F},\qquad z_i=(\mu_i(\widetilde s_b))_{b=1}^{P}',
             r'd_{ij}=\lVert z_i-\operatorname{sg}(z_j)\rVert^2,\quad h=\operatorname{sg}\!\left(\max\left\{\frac{\operatorname{med}_{i,j}d_{ij}}{\log(H+1)},\varepsilon_h\right\}\right)',
             r'R_{\mathrm F}=\sum_{i=1}^{H}\log\left[\sum_{j=1}^{H}\exp(-d_{ij}/h)\right]'
-        ],[(r'z_i,\widetilde x_b','Mean predictions on shared preprocessed batch inputs.'),(r'R_{\mathrm F},\lambda','Unweighted functional repulsion and its objective weight.'),(r'\mathcal L_2','BDKN stage-two loss above, using the trained FRDE features.')]),
+        ],[(r'z_i,\widetilde s_b, P','Mean predictions, shared preprocessed repulsion inputs, and their count.'),(r'R_{\mathrm F},\lambda','Unweighted functional repulsion and its objective weight.'),(r'\mathcal L_2','BDKN stage-two loss above, using the trained FRDE features.')]),
         ('wrde','Weight repulsion (WRDE)',[
             r'\mathcal L_1=\mathcal L_{\mathrm{DE}}+\lambda R_{\mathrm W},\qquad z_i=\theta_i',
             r'd_{ij}=\lVert\theta_i-\operatorname{sg}(\theta_j)\rVert^2,\quad h=\operatorname{sg}\!\left(\max\left\{\frac{\operatorname{med}_{i,j}d_{ij}}{\log(H+1)},\varepsilon_h\right\}\right)',
             r'R_{\mathrm W}=\sum_{i=1}^{H}\log\left[\sum_{j=1}^{H}\exp(-d_{ij}/h)\right]'
         ],[(r'\theta_i','All trainable parameters of network i, including both output heads.'),(r'R_{\mathrm W},\lambda','Unweighted weight repulsion and its objective weight.'),(r'\mathcal L_2','BDKN stage-two loss above, using the trained WRDE features.')]),
         ('forde','First-order repulsion (FoRDE, 1D)',[
-            r'\mathcal L_1=\mathcal L_{\mathrm{DE}}+\lambda R_{\mathrm G},\quad g_i=\left(\frac{\partial\mu_i(\widetilde x_b)}{\partial\widetilde x_b}\right)_{b=1}^{B},\quad z_i=\frac{g_i}{\sqrt{\lVert g_i\rVert^2+\varepsilon_g}}',
+            r'\mathcal L_1=\mathcal L_{\mathrm{DE}}+\lambda R_{\mathrm G},\quad g_i=\left(\frac{\partial\mu_i(\widetilde s_b)}{\partial\widetilde s_b}\right)_{b=1}^{P},\quad z_i=\frac{g_i}{\sqrt{\lVert g_i\rVert^2+\varepsilon_g}}',
             r'd_{ij}=\lVert z_i-\operatorname{sg}(z_j)\rVert^2,\quad h_j=\operatorname{sg}\!\left(\max\left\{\frac{\operatorname{med}_{i}d_{ij}}{\log H},\varepsilon_h\right\}\right)',
             r'R_{\mathrm G}=\sum_{i=1}^{H}\log\left[\sum_{j=1}^{H}\exp(-d_{ij}/h_j)\right]'
-        ],[(r'g_i,z_i','Batch input-gradient vector and its normalized particle.'),(r'h_j','Bandwidth for reference network j.'),(r'R_{\mathrm G},\lambda','Unweighted first-order repulsion and its objective weight.'),(r'\mathcal L_2','BDKN stage-two loss above, using the trained FoRDE features.')]),
+        ],[(r'g_i,z_i','Input-gradient vector on the selected repulsion inputs and its normalized particle.'),(r'h_j','Bandwidth for reference network j.'),(r'R_{\mathrm G},\lambda','Unweighted first-order repulsion and its objective weight.'),(r'\mathcal L_2','BDKN stage-two loss above, using the trained FoRDE features.')]),
         ('gp','Gaussian process (GP)',[
             r'\mathcal L_{\mathrm{GP}}=\frac{r^\top K_y^{-1}r+\log|K_y|+n\log(2\pi)}{2n},\quad r=y-m(X),\quad K_y=K(X,X)+\sigma^2I'
         ],[(r'K,m,\sigma^2','Configured linear-plus-RBF covariance, mean function, and observation noise variance.'),(r'X,y,n','Preprocessed training inputs, targets, and training count.')]),
@@ -231,6 +233,7 @@ def loss_definitions():
         body+='<article id="definition-'+key+'"><h3>'+title+'</h3>'+''.join(latex(eq) for eq in equations)+symbols(parameters)+'</article>'
     body+='<h3>Shared repulsion symbols</h3>'+symbols([
         (r'd_{ij},h,\operatorname{med}','Squared particle distance, bandwidth, and median; pairs include i = j.'),
+        (r'P,\widetilde s_b','Repulsion count and input: B training points, B random domain points, or their 2B-point union.'),
         (r'\operatorname{sg}','Stop-gradient: treated as fixed during differentiation.'),
         (r'\varepsilon_h=10^{-6},\ \varepsilon_g=10^{-8}','Bandwidth floor and gradient normalization constant.'),
         (r'R_{\mathrm F},R_{\mathrm W},R_{\mathrm G}','Separate repulsion panels show R; objective panels show the full loss including λR.')])
@@ -245,11 +248,11 @@ def overview_tables(ctx):
     """Rows compare methods within one dataset; never color across target scales."""
     registry=ctx['registry'];active=ctx['entry'];names=ctx['names']
     prefix='' if not active['directory'] else '../../'
-    cache_key=(json.dumps(registry,sort_keys=True),active['learning_rate'],active['repulsion'])
+    cache_key=(json.dumps(registry,sort_keys=True),active['learning_rate'],active['repulsion'],active.get('repulsion_location','training'))
     if cache_key not in _OVERVIEW_CACHE:
         selected=[]
         for entry in registry['experiments']:
-            if entry['learning_rate']!=active['learning_rate'] or entry['repulsion']!=active['repulsion']:continue
+            if entry['learning_rate']!=active['learning_rate'] or entry['repulsion']!=active['repulsion'] or entry.get('repulsion_location','training')!=active.get('repulsion_location','training'):continue
             rows=[]
             for folder in Path(entry['run']).iterdir():
                 if folder.is_dir() and (folder/'metrics.json').exists():rows+=json.loads((folder/'metrics.json').read_text())
@@ -278,7 +281,7 @@ def overview_tables(ctx):
 
 
 def render_report(ctx):
-    output=ctx['output'];names=ctx['names'];rows=ctx['rows'];configs=ctx['configs'];lookup={r['method']:r for r in rows};dataset=ctx['registry']['datasets'][ctx['entry']['dataset']]
+    entry=ctx['entry'];output=ctx['output'];names=ctx['names'];rows=ctx['rows'];configs=ctx['configs'];lookup={r['method']:r for r in rows};dataset=ctx['registry']['datasets'][ctx['entry']['dataset']]
     body=overview_tables(ctx)
     (output/'index.html').write_text(page(ctx,'Results','index.html',body))
     (output/'main_results.html').write_text(page(ctx,'Results','index.html',body))
@@ -310,11 +313,12 @@ def render_report(ctx):
     noise=metadata.get('noise_std',dataset.get('noise_std',.1))
     body='<section><h2>'+escape(dataset['label'])+'</h2>'+image('data.png','Training and test observations',True)+f'<p class="note">{len(data["x_train"])} training · {len(data["x_test"])} test · seed {metadata.get("seed","—")}</p><h3>Generating function</h3>'+formula_block+(latex(r'\sigma(t)=\frac{1}{1+e^{-t}}') if ctx['entry']['dataset']=='steps' else '')+(latex(r'y=f(x)') if noise==0 else latex(r'\varepsilon\sim\mathcal N(0,\sigma_\varepsilon^2),\quad y=f(x)+\varepsilon,\quad \sigma_\varepsilon='+format(noise,'.8g')))+'<p>'+escape(sampling)+'</p><p class="note">Test inputs: independent uniform observations over the full displayed domain. '+('NumPy normalized sinc: sin(πt)/(πt), with sinc(0) = 1.' if 'sinc' in ctx['entry']['dataset'] else '')+'</p><a href="downloads/toy_1d.npz" download>Download dataset</a></section>'
     (output/'dataset.html').write_text(page(ctx,'Data','dataset.html',body))
-    body='<section><h2>Settings</h2><div class="table-wrap"><table class="settings"><thead><tr><th>Method</th><th>Epochs</th><th>Learning rate</th><th>Hidden layers / kernel</th><th>Repulsion</th><th>Device</th></tr></thead><tbody>'
+    body='<section><h2>Settings</h2><div class="table-wrap"><table class="settings"><thead><tr><th>Method</th><th>Epochs</th><th>Learning rate</th><th>Hidden layers / kernel</th><th>Repulsion</th><th>Repulsion inputs</th><th>Device</th></tr></thead><tbody>'
     for method,cfg in configs.items():
         arch=cfg.get('hidden_dims') or ([cfg['hidden_dim']]*cfg['hidden_layers'] if 'hidden_dim' in cfg else cfg.get('kernel'))
-        body+=f'<tr><th>{names.get(method,method)}</th><td>{cfg["epochs"]:,}</td><td>{cfg["lr"]:g}</td><td>{escape(str(arch))}</td><td>{cfg.get("repulsion_strength","—")}</td><td>{cfg["device"]}</td></tr>'
-    body+='</tbody></table></div><div class="downloads"><a href="downloads/settings.json" download>Settings JSON</a><a href="downloads/metrics.csv" download>Metrics CSV</a><a href="downloads/provenance.json" download>Source provenance</a></div></section>'
+        location_label='Location-independent' if method=='wrde' else ({'training':'Training · B points','random':'Random · B points','combined':'Training + random · 2B points'}[entry['repulsion_location']] if method in ('frde','forde') else '—')
+        body+=f'<tr><th>{names.get(method,method)}</th><td>{cfg["epochs"]:,}</td><td>{cfg["lr"]:g}</td><td>{escape(str(arch))}</td><td>{cfg.get("repulsion_strength","—")}</td><td>{location_label}</td><td>{cfg["device"]}</td></tr>'
+    body+='</tbody></table></div><p class="note">B is the actual training minibatch size, up to 32. Random points redraw each step, are distinct from all training inputs and one another, and cover the displayed domain. Weight repulsion is location-independent.</p><div class="downloads"><a href="downloads/settings.json" download>Settings JSON</a><a href="downloads/metrics.csv" download>Metrics CSV</a><a href="downloads/provenance.json" download>Source provenance</a></div></section>'
     (output/'settings.html').write_text(page(ctx,'Settings','settings.html',body))
     render_strengths(ctx)
     from aggregation_report import render as render_aggregation
@@ -339,8 +343,8 @@ def generated_plot_exists(ctx,filename):
 def render_strengths(ctx):
     """One panel per weight; compare values without overlaying predictions."""
     entry=ctx['entry'];names=ctx['names']
-    related=sorted([e for e in ctx['registry']['experiments'] if e['dataset']==entry['dataset'] and e['learning_rate']==entry['learning_rate']],key=lambda e:float(e['repulsion']))
-    group=(entry['dataset'],entry['learning_rate']);assets=ctx['output']/'assets'
+    related=sorted([e for e in ctx['registry']['experiments'] if e['dataset']==entry['dataset'] and e['learning_rate']==entry['learning_rate'] and e['repulsion_location']==entry['repulsion_location']],key=lambda e:float(e['repulsion']))
+    group=(entry['dataset'],entry['learning_rate'],entry['repulsion_location']);assets=ctx['output']/'assets'
     if group in _STRENGTH_CACHE:
         origin,comparison,repulsion_charts=_STRENGTH_CACHE[group]
         for filename in origin.glob('weight_*.png'):

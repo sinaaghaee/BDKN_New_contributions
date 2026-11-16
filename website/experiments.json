@@ -981,6 +981,1906 @@
       "epochs": 40,
       "gp_learning_rate": 0.1,
       "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "steps-lr0p1-r0p001-random",
+      "dataset": "steps",
+      "learning_rate": 0.1,
+      "repulsion": 0.001,
+      "run": "results/suite_high/locations/random/steps/r0p001",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "steps-lr0p1-r0p01-random",
+      "dataset": "steps",
+      "learning_rate": 0.1,
+      "repulsion": 0.01,
+      "run": "results/suite_high/locations/random/steps/r0p01",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "steps-lr0p1-r0p1-random",
+      "dataset": "steps",
+      "learning_rate": 0.1,
+      "repulsion": 0.1,
+      "run": "results/suite_high/locations/random/steps/r0p1",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "steps-lr0p1-r1-random",
+      "dataset": "steps",
+      "learning_rate": 0.1,
+      "repulsion": 1.0,
+      "run": "results/suite_high/locations/random/steps/r1",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "steps-lr0p1-r10-random",
+      "dataset": "steps",
+      "learning_rate": 0.1,
+      "repulsion": 10.0,
+      "run": "results/suite_high/locations/random/steps/r10",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "cubic-lr0p1-r0p001-random",
+      "dataset": "cubic",
+      "learning_rate": 0.1,
+      "repulsion": 0.001,
+      "run": "results/suite_high/locations/random/cubic/r0p001",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "cubic-lr0p1-r0p01-random",
+      "dataset": "cubic",
+      "learning_rate": 0.1,
+      "repulsion": 0.01,
+      "run": "results/suite_high/locations/random/cubic/r0p01",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "cubic-lr0p1-r0p1-random",
+      "dataset": "cubic",
+      "learning_rate": 0.1,
+      "repulsion": 0.1,
+      "run": "results/suite_high/locations/random/cubic/r0p1",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "cubic-lr0p1-r1-random",
+      "dataset": "cubic",
+      "learning_rate": 0.1,
+      "repulsion": 1.0,
+      "run": "results/suite_high/locations/random/cubic/r1",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "cubic-lr0p1-r10-random",
+      "dataset": "cubic",
+      "learning_rate": 0.1,
+      "repulsion": 10.0,
+      "run": "results/suite_high/locations/random/cubic/r10",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "forrester-lr0p1-r0p001-random",
+      "dataset": "forrester",
+      "learning_rate": 0.1,
+      "repulsion": 0.001,
+      "run": "results/suite_high/locations/random/forrester/r0p001",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "forrester-lr0p1-r0p01-random",
+      "dataset": "forrester",
+      "learning_rate": 0.1,
+      "repulsion": 0.01,
+      "run": "results/suite_high/locations/random/forrester/r0p01",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "forrester-lr0p1-r0p1-random",
+      "dataset": "forrester",
+      "learning_rate": 0.1,
+      "repulsion": 0.1,
+      "run": "results/suite_high/locations/random/forrester/r0p1",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "forrester-lr0p1-r1-random",
+      "dataset": "forrester",
+      "learning_rate": 0.1,
+      "repulsion": 1.0,
+      "run": "results/suite_high/locations/random/forrester/r1",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "forrester-lr0p1-r10-random",
+      "dataset": "forrester",
+      "learning_rate": 0.1,
+      "repulsion": 10.0,
+      "run": "results/suite_high/locations/random/forrester/r10",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "he-lr0p1-r0p001-random",
+      "dataset": "he",
+      "learning_rate": 0.1,
+      "repulsion": 0.001,
+      "run": "results/suite_high/locations/random/he/r0p001",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "he-lr0p1-r0p01-random",
+      "dataset": "he",
+      "learning_rate": 0.1,
+      "repulsion": 0.01,
+      "run": "results/suite_high/locations/random/he/r0p01",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "he-lr0p1-r0p1-random",
+      "dataset": "he",
+      "learning_rate": 0.1,
+      "repulsion": 0.1,
+      "run": "results/suite_high/locations/random/he/r0p1",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "he-lr0p1-r1-random",
+      "dataset": "he",
+      "learning_rate": 0.1,
+      "repulsion": 1.0,
+      "run": "results/suite_high/locations/random/he/r1",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "he-lr0p1-r10-random",
+      "dataset": "he",
+      "learning_rate": 0.1,
+      "repulsion": 10.0,
+      "run": "results/suite_high/locations/random/he/r10",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "amplitude-sine-lr0p1-r0p001-random",
+      "dataset": "amplitude-sine",
+      "learning_rate": 0.1,
+      "repulsion": 0.001,
+      "run": "results/suite_high/locations/random/amplitude-sine/r0p001",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "amplitude-sine-lr0p1-r0p01-random",
+      "dataset": "amplitude-sine",
+      "learning_rate": 0.1,
+      "repulsion": 0.01,
+      "run": "results/suite_high/locations/random/amplitude-sine/r0p01",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "amplitude-sine-lr0p1-r0p1-random",
+      "dataset": "amplitude-sine",
+      "learning_rate": 0.1,
+      "repulsion": 0.1,
+      "run": "results/suite_high/locations/random/amplitude-sine/r0p1",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "amplitude-sine-lr0p1-r1-random",
+      "dataset": "amplitude-sine",
+      "learning_rate": 0.1,
+      "repulsion": 1.0,
+      "run": "results/suite_high/locations/random/amplitude-sine/r1",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "amplitude-sine-lr0p1-r10-random",
+      "dataset": "amplitude-sine",
+      "learning_rate": 0.1,
+      "repulsion": 10.0,
+      "run": "results/suite_high/locations/random/amplitude-sine/r10",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "linear-sinc-lr0p1-r0p001-random",
+      "dataset": "linear-sinc",
+      "learning_rate": 0.1,
+      "repulsion": 0.001,
+      "run": "results/suite_high/locations/random/linear-sinc/r0p001",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "linear-sinc-lr0p1-r0p01-random",
+      "dataset": "linear-sinc",
+      "learning_rate": 0.1,
+      "repulsion": 0.01,
+      "run": "results/suite_high/locations/random/linear-sinc/r0p01",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "linear-sinc-lr0p1-r0p1-random",
+      "dataset": "linear-sinc",
+      "learning_rate": 0.1,
+      "repulsion": 0.1,
+      "run": "results/suite_high/locations/random/linear-sinc/r0p1",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "linear-sinc-lr0p1-r1-random",
+      "dataset": "linear-sinc",
+      "learning_rate": 0.1,
+      "repulsion": 1.0,
+      "run": "results/suite_high/locations/random/linear-sinc/r1",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "linear-sinc-lr0p1-r10-random",
+      "dataset": "linear-sinc",
+      "learning_rate": 0.1,
+      "repulsion": 10.0,
+      "run": "results/suite_high/locations/random/linear-sinc/r10",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "square-wave-lr0p1-r0p001-random",
+      "dataset": "square-wave",
+      "learning_rate": 0.1,
+      "repulsion": 0.001,
+      "run": "results/suite_high/locations/random/square-wave/r0p001",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "square-wave-lr0p1-r0p01-random",
+      "dataset": "square-wave",
+      "learning_rate": 0.1,
+      "repulsion": 0.01,
+      "run": "results/suite_high/locations/random/square-wave/r0p01",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "square-wave-lr0p1-r0p1-random",
+      "dataset": "square-wave",
+      "learning_rate": 0.1,
+      "repulsion": 0.1,
+      "run": "results/suite_high/locations/random/square-wave/r0p1",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "square-wave-lr0p1-r1-random",
+      "dataset": "square-wave",
+      "learning_rate": 0.1,
+      "repulsion": 1.0,
+      "run": "results/suite_high/locations/random/square-wave/r1",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "square-wave-lr0p1-r10-random",
+      "dataset": "square-wave",
+      "learning_rate": 0.1,
+      "repulsion": 10.0,
+      "run": "results/suite_high/locations/random/square-wave/r10",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "shifted-sinc-lr0p1-r0p001-random",
+      "dataset": "shifted-sinc",
+      "learning_rate": 0.1,
+      "repulsion": 0.001,
+      "run": "results/suite_high/locations/random/shifted-sinc/r0p001",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "shifted-sinc-lr0p1-r0p01-random",
+      "dataset": "shifted-sinc",
+      "learning_rate": 0.1,
+      "repulsion": 0.01,
+      "run": "results/suite_high/locations/random/shifted-sinc/r0p01",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "shifted-sinc-lr0p1-r0p1-random",
+      "dataset": "shifted-sinc",
+      "learning_rate": 0.1,
+      "repulsion": 0.1,
+      "run": "results/suite_high/locations/random/shifted-sinc/r0p1",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "shifted-sinc-lr0p1-r1-random",
+      "dataset": "shifted-sinc",
+      "learning_rate": 0.1,
+      "repulsion": 1.0,
+      "run": "results/suite_high/locations/random/shifted-sinc/r1",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "shifted-sinc-lr0p1-r10-random",
+      "dataset": "shifted-sinc",
+      "learning_rate": 0.1,
+      "repulsion": 10.0,
+      "run": "results/suite_high/locations/random/shifted-sinc/r10",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "sine-lr0p1-r0p001-random",
+      "dataset": "sine",
+      "learning_rate": 0.1,
+      "repulsion": 0.001,
+      "run": "results/suite_high/locations/random/sine/r0p001",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "sine-lr0p1-r0p01-random",
+      "dataset": "sine",
+      "learning_rate": 0.1,
+      "repulsion": 0.01,
+      "run": "results/suite_high/locations/random/sine/r0p01",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "sine-lr0p1-r0p1-random",
+      "dataset": "sine",
+      "learning_rate": 0.1,
+      "repulsion": 0.1,
+      "run": "results/suite_high/locations/random/sine/r0p1",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "sine-lr0p1-r1-random",
+      "dataset": "sine",
+      "learning_rate": 0.1,
+      "repulsion": 1.0,
+      "run": "results/suite_high/locations/random/sine/r1",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "sine-lr0p1-r10-random",
+      "dataset": "sine",
+      "learning_rate": 0.1,
+      "repulsion": 10.0,
+      "run": "results/suite_high/locations/random/sine/r10",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "cosine-lr0p1-r0p001-random",
+      "dataset": "cosine",
+      "learning_rate": 0.1,
+      "repulsion": 0.001,
+      "run": "results/suite_high/locations/random/cosine/r0p001",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "cosine-lr0p1-r0p01-random",
+      "dataset": "cosine",
+      "learning_rate": 0.1,
+      "repulsion": 0.01,
+      "run": "results/suite_high/locations/random/cosine/r0p01",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "cosine-lr0p1-r0p1-random",
+      "dataset": "cosine",
+      "learning_rate": 0.1,
+      "repulsion": 0.1,
+      "run": "results/suite_high/locations/random/cosine/r0p1",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "cosine-lr0p1-r1-random",
+      "dataset": "cosine",
+      "learning_rate": 0.1,
+      "repulsion": 1.0,
+      "run": "results/suite_high/locations/random/cosine/r1",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "cosine-lr0p1-r10-random",
+      "dataset": "cosine",
+      "learning_rate": 0.1,
+      "repulsion": 10.0,
+      "run": "results/suite_high/locations/random/cosine/r10",
+      "repulsion_location": "random",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "steps-lr0p1-r0p001-combined",
+      "dataset": "steps",
+      "learning_rate": 0.1,
+      "repulsion": 0.001,
+      "run": "results/suite_high/locations/combined/steps/r0p001",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "steps-lr0p1-r0p01-combined",
+      "dataset": "steps",
+      "learning_rate": 0.1,
+      "repulsion": 0.01,
+      "run": "results/suite_high/locations/combined/steps/r0p01",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "steps-lr0p1-r0p1-combined",
+      "dataset": "steps",
+      "learning_rate": 0.1,
+      "repulsion": 0.1,
+      "run": "results/suite_high/locations/combined/steps/r0p1",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "steps-lr0p1-r1-combined",
+      "dataset": "steps",
+      "learning_rate": 0.1,
+      "repulsion": 1.0,
+      "run": "results/suite_high/locations/combined/steps/r1",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "steps-lr0p1-r10-combined",
+      "dataset": "steps",
+      "learning_rate": 0.1,
+      "repulsion": 10.0,
+      "run": "results/suite_high/locations/combined/steps/r10",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "cubic-lr0p1-r0p001-combined",
+      "dataset": "cubic",
+      "learning_rate": 0.1,
+      "repulsion": 0.001,
+      "run": "results/suite_high/locations/combined/cubic/r0p001",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "cubic-lr0p1-r0p01-combined",
+      "dataset": "cubic",
+      "learning_rate": 0.1,
+      "repulsion": 0.01,
+      "run": "results/suite_high/locations/combined/cubic/r0p01",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "cubic-lr0p1-r0p1-combined",
+      "dataset": "cubic",
+      "learning_rate": 0.1,
+      "repulsion": 0.1,
+      "run": "results/suite_high/locations/combined/cubic/r0p1",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "cubic-lr0p1-r1-combined",
+      "dataset": "cubic",
+      "learning_rate": 0.1,
+      "repulsion": 1.0,
+      "run": "results/suite_high/locations/combined/cubic/r1",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "cubic-lr0p1-r10-combined",
+      "dataset": "cubic",
+      "learning_rate": 0.1,
+      "repulsion": 10.0,
+      "run": "results/suite_high/locations/combined/cubic/r10",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "forrester-lr0p1-r0p001-combined",
+      "dataset": "forrester",
+      "learning_rate": 0.1,
+      "repulsion": 0.001,
+      "run": "results/suite_high/locations/combined/forrester/r0p001",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "forrester-lr0p1-r0p01-combined",
+      "dataset": "forrester",
+      "learning_rate": 0.1,
+      "repulsion": 0.01,
+      "run": "results/suite_high/locations/combined/forrester/r0p01",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "forrester-lr0p1-r0p1-combined",
+      "dataset": "forrester",
+      "learning_rate": 0.1,
+      "repulsion": 0.1,
+      "run": "results/suite_high/locations/combined/forrester/r0p1",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "forrester-lr0p1-r1-combined",
+      "dataset": "forrester",
+      "learning_rate": 0.1,
+      "repulsion": 1.0,
+      "run": "results/suite_high/locations/combined/forrester/r1",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "forrester-lr0p1-r10-combined",
+      "dataset": "forrester",
+      "learning_rate": 0.1,
+      "repulsion": 10.0,
+      "run": "results/suite_high/locations/combined/forrester/r10",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "he-lr0p1-r0p001-combined",
+      "dataset": "he",
+      "learning_rate": 0.1,
+      "repulsion": 0.001,
+      "run": "results/suite_high/locations/combined/he/r0p001",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "he-lr0p1-r0p01-combined",
+      "dataset": "he",
+      "learning_rate": 0.1,
+      "repulsion": 0.01,
+      "run": "results/suite_high/locations/combined/he/r0p01",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "he-lr0p1-r0p1-combined",
+      "dataset": "he",
+      "learning_rate": 0.1,
+      "repulsion": 0.1,
+      "run": "results/suite_high/locations/combined/he/r0p1",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "he-lr0p1-r1-combined",
+      "dataset": "he",
+      "learning_rate": 0.1,
+      "repulsion": 1.0,
+      "run": "results/suite_high/locations/combined/he/r1",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "he-lr0p1-r10-combined",
+      "dataset": "he",
+      "learning_rate": 0.1,
+      "repulsion": 10.0,
+      "run": "results/suite_high/locations/combined/he/r10",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "amplitude-sine-lr0p1-r0p001-combined",
+      "dataset": "amplitude-sine",
+      "learning_rate": 0.1,
+      "repulsion": 0.001,
+      "run": "results/suite_high/locations/combined/amplitude-sine/r0p001",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "amplitude-sine-lr0p1-r0p01-combined",
+      "dataset": "amplitude-sine",
+      "learning_rate": 0.1,
+      "repulsion": 0.01,
+      "run": "results/suite_high/locations/combined/amplitude-sine/r0p01",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "amplitude-sine-lr0p1-r0p1-combined",
+      "dataset": "amplitude-sine",
+      "learning_rate": 0.1,
+      "repulsion": 0.1,
+      "run": "results/suite_high/locations/combined/amplitude-sine/r0p1",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "amplitude-sine-lr0p1-r1-combined",
+      "dataset": "amplitude-sine",
+      "learning_rate": 0.1,
+      "repulsion": 1.0,
+      "run": "results/suite_high/locations/combined/amplitude-sine/r1",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "amplitude-sine-lr0p1-r10-combined",
+      "dataset": "amplitude-sine",
+      "learning_rate": 0.1,
+      "repulsion": 10.0,
+      "run": "results/suite_high/locations/combined/amplitude-sine/r10",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "linear-sinc-lr0p1-r0p001-combined",
+      "dataset": "linear-sinc",
+      "learning_rate": 0.1,
+      "repulsion": 0.001,
+      "run": "results/suite_high/locations/combined/linear-sinc/r0p001",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "linear-sinc-lr0p1-r0p01-combined",
+      "dataset": "linear-sinc",
+      "learning_rate": 0.1,
+      "repulsion": 0.01,
+      "run": "results/suite_high/locations/combined/linear-sinc/r0p01",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "linear-sinc-lr0p1-r0p1-combined",
+      "dataset": "linear-sinc",
+      "learning_rate": 0.1,
+      "repulsion": 0.1,
+      "run": "results/suite_high/locations/combined/linear-sinc/r0p1",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "linear-sinc-lr0p1-r1-combined",
+      "dataset": "linear-sinc",
+      "learning_rate": 0.1,
+      "repulsion": 1.0,
+      "run": "results/suite_high/locations/combined/linear-sinc/r1",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "linear-sinc-lr0p1-r10-combined",
+      "dataset": "linear-sinc",
+      "learning_rate": 0.1,
+      "repulsion": 10.0,
+      "run": "results/suite_high/locations/combined/linear-sinc/r10",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "square-wave-lr0p1-r0p001-combined",
+      "dataset": "square-wave",
+      "learning_rate": 0.1,
+      "repulsion": 0.001,
+      "run": "results/suite_high/locations/combined/square-wave/r0p001",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "square-wave-lr0p1-r0p01-combined",
+      "dataset": "square-wave",
+      "learning_rate": 0.1,
+      "repulsion": 0.01,
+      "run": "results/suite_high/locations/combined/square-wave/r0p01",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "square-wave-lr0p1-r0p1-combined",
+      "dataset": "square-wave",
+      "learning_rate": 0.1,
+      "repulsion": 0.1,
+      "run": "results/suite_high/locations/combined/square-wave/r0p1",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "square-wave-lr0p1-r1-combined",
+      "dataset": "square-wave",
+      "learning_rate": 0.1,
+      "repulsion": 1.0,
+      "run": "results/suite_high/locations/combined/square-wave/r1",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "square-wave-lr0p1-r10-combined",
+      "dataset": "square-wave",
+      "learning_rate": 0.1,
+      "repulsion": 10.0,
+      "run": "results/suite_high/locations/combined/square-wave/r10",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "shifted-sinc-lr0p1-r0p001-combined",
+      "dataset": "shifted-sinc",
+      "learning_rate": 0.1,
+      "repulsion": 0.001,
+      "run": "results/suite_high/locations/combined/shifted-sinc/r0p001",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "shifted-sinc-lr0p1-r0p01-combined",
+      "dataset": "shifted-sinc",
+      "learning_rate": 0.1,
+      "repulsion": 0.01,
+      "run": "results/suite_high/locations/combined/shifted-sinc/r0p01",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "shifted-sinc-lr0p1-r0p1-combined",
+      "dataset": "shifted-sinc",
+      "learning_rate": 0.1,
+      "repulsion": 0.1,
+      "run": "results/suite_high/locations/combined/shifted-sinc/r0p1",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "shifted-sinc-lr0p1-r1-combined",
+      "dataset": "shifted-sinc",
+      "learning_rate": 0.1,
+      "repulsion": 1.0,
+      "run": "results/suite_high/locations/combined/shifted-sinc/r1",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "shifted-sinc-lr0p1-r10-combined",
+      "dataset": "shifted-sinc",
+      "learning_rate": 0.1,
+      "repulsion": 10.0,
+      "run": "results/suite_high/locations/combined/shifted-sinc/r10",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "sine-lr0p1-r0p001-combined",
+      "dataset": "sine",
+      "learning_rate": 0.1,
+      "repulsion": 0.001,
+      "run": "results/suite_high/locations/combined/sine/r0p001",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "sine-lr0p1-r0p01-combined",
+      "dataset": "sine",
+      "learning_rate": 0.1,
+      "repulsion": 0.01,
+      "run": "results/suite_high/locations/combined/sine/r0p01",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "sine-lr0p1-r0p1-combined",
+      "dataset": "sine",
+      "learning_rate": 0.1,
+      "repulsion": 0.1,
+      "run": "results/suite_high/locations/combined/sine/r0p1",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "sine-lr0p1-r1-combined",
+      "dataset": "sine",
+      "learning_rate": 0.1,
+      "repulsion": 1.0,
+      "run": "results/suite_high/locations/combined/sine/r1",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "sine-lr0p1-r10-combined",
+      "dataset": "sine",
+      "learning_rate": 0.1,
+      "repulsion": 10.0,
+      "run": "results/suite_high/locations/combined/sine/r10",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "cosine-lr0p1-r0p001-combined",
+      "dataset": "cosine",
+      "learning_rate": 0.1,
+      "repulsion": 0.001,
+      "run": "results/suite_high/locations/combined/cosine/r0p001",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "cosine-lr0p1-r0p01-combined",
+      "dataset": "cosine",
+      "learning_rate": 0.1,
+      "repulsion": 0.01,
+      "run": "results/suite_high/locations/combined/cosine/r0p01",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "cosine-lr0p1-r0p1-combined",
+      "dataset": "cosine",
+      "learning_rate": 0.1,
+      "repulsion": 0.1,
+      "run": "results/suite_high/locations/combined/cosine/r0p1",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "cosine-lr0p1-r1-combined",
+      "dataset": "cosine",
+      "learning_rate": 0.1,
+      "repulsion": 1.0,
+      "run": "results/suite_high/locations/combined/cosine/r1",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "cosine-lr0p1-r10-combined",
+      "dataset": "cosine",
+      "learning_rate": 0.1,
+      "repulsion": 10.0,
+      "run": "results/suite_high/locations/combined/cosine/r10",
+      "repulsion_location": "combined",
+      "epochs": 40,
+      "gp_learning_rate": 0.1,
+      "setting_label": "High LR \u00b7 40 epochs"
+    },
+    {
+      "id": "steps-lr0p001-r0p001-random",
+      "dataset": "steps",
+      "learning_rate": 0.001,
+      "repulsion": 0.001,
+      "run": "results/suite/locations/random/steps/r0p001",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "steps-lr0p001-r0p01-random",
+      "dataset": "steps",
+      "learning_rate": 0.001,
+      "repulsion": 0.01,
+      "run": "results/suite/locations/random/steps/r0p01",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "steps-lr0p001-r0p1-random",
+      "dataset": "steps",
+      "learning_rate": 0.001,
+      "repulsion": 0.1,
+      "run": "results/suite/locations/random/steps/r0p1",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "steps-lr0p001-r1-random",
+      "dataset": "steps",
+      "learning_rate": 0.001,
+      "repulsion": 1.0,
+      "run": "results/suite/locations/random/steps/r1",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "steps-lr0p001-r10-random",
+      "dataset": "steps",
+      "learning_rate": 0.001,
+      "repulsion": 10.0,
+      "run": "results/suite/locations/random/steps/r10",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "cubic-lr0p001-r0p001-random",
+      "dataset": "cubic",
+      "learning_rate": 0.001,
+      "repulsion": 0.001,
+      "run": "results/suite/locations/random/cubic/r0p001",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "cubic-lr0p001-r0p01-random",
+      "dataset": "cubic",
+      "learning_rate": 0.001,
+      "repulsion": 0.01,
+      "run": "results/suite/locations/random/cubic/r0p01",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "cubic-lr0p001-r0p1-random",
+      "dataset": "cubic",
+      "learning_rate": 0.001,
+      "repulsion": 0.1,
+      "run": "results/suite/locations/random/cubic/r0p1",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "cubic-lr0p001-r1-random",
+      "dataset": "cubic",
+      "learning_rate": 0.001,
+      "repulsion": 1.0,
+      "run": "results/suite/locations/random/cubic/r1",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "cubic-lr0p001-r10-random",
+      "dataset": "cubic",
+      "learning_rate": 0.001,
+      "repulsion": 10.0,
+      "run": "results/suite/locations/random/cubic/r10",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "forrester-lr0p001-r0p001-random",
+      "dataset": "forrester",
+      "learning_rate": 0.001,
+      "repulsion": 0.001,
+      "run": "results/suite/locations/random/forrester/r0p001",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "forrester-lr0p001-r0p01-random",
+      "dataset": "forrester",
+      "learning_rate": 0.001,
+      "repulsion": 0.01,
+      "run": "results/suite/locations/random/forrester/r0p01",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "forrester-lr0p001-r0p1-random",
+      "dataset": "forrester",
+      "learning_rate": 0.001,
+      "repulsion": 0.1,
+      "run": "results/suite/locations/random/forrester/r0p1",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "forrester-lr0p001-r1-random",
+      "dataset": "forrester",
+      "learning_rate": 0.001,
+      "repulsion": 1.0,
+      "run": "results/suite/locations/random/forrester/r1",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "forrester-lr0p001-r10-random",
+      "dataset": "forrester",
+      "learning_rate": 0.001,
+      "repulsion": 10.0,
+      "run": "results/suite/locations/random/forrester/r10",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "he-lr0p001-r0p001-random",
+      "dataset": "he",
+      "learning_rate": 0.001,
+      "repulsion": 0.001,
+      "run": "results/suite/locations/random/he/r0p001",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "he-lr0p001-r0p01-random",
+      "dataset": "he",
+      "learning_rate": 0.001,
+      "repulsion": 0.01,
+      "run": "results/suite/locations/random/he/r0p01",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "he-lr0p001-r0p1-random",
+      "dataset": "he",
+      "learning_rate": 0.001,
+      "repulsion": 0.1,
+      "run": "results/suite/locations/random/he/r0p1",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "he-lr0p001-r1-random",
+      "dataset": "he",
+      "learning_rate": 0.001,
+      "repulsion": 1.0,
+      "run": "results/suite/locations/random/he/r1",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "he-lr0p001-r10-random",
+      "dataset": "he",
+      "learning_rate": 0.001,
+      "repulsion": 10.0,
+      "run": "results/suite/locations/random/he/r10",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "amplitude-sine-lr0p001-r0p001-random",
+      "dataset": "amplitude-sine",
+      "learning_rate": 0.001,
+      "repulsion": 0.001,
+      "run": "results/suite/locations/random/amplitude-sine/r0p001",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "amplitude-sine-lr0p001-r0p01-random",
+      "dataset": "amplitude-sine",
+      "learning_rate": 0.001,
+      "repulsion": 0.01,
+      "run": "results/suite/locations/random/amplitude-sine/r0p01",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "amplitude-sine-lr0p001-r0p1-random",
+      "dataset": "amplitude-sine",
+      "learning_rate": 0.001,
+      "repulsion": 0.1,
+      "run": "results/suite/locations/random/amplitude-sine/r0p1",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "amplitude-sine-lr0p001-r1-random",
+      "dataset": "amplitude-sine",
+      "learning_rate": 0.001,
+      "repulsion": 1.0,
+      "run": "results/suite/locations/random/amplitude-sine/r1",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "amplitude-sine-lr0p001-r10-random",
+      "dataset": "amplitude-sine",
+      "learning_rate": 0.001,
+      "repulsion": 10.0,
+      "run": "results/suite/locations/random/amplitude-sine/r10",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "linear-sinc-lr0p001-r0p001-random",
+      "dataset": "linear-sinc",
+      "learning_rate": 0.001,
+      "repulsion": 0.001,
+      "run": "results/suite/locations/random/linear-sinc/r0p001",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "linear-sinc-lr0p001-r0p01-random",
+      "dataset": "linear-sinc",
+      "learning_rate": 0.001,
+      "repulsion": 0.01,
+      "run": "results/suite/locations/random/linear-sinc/r0p01",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "linear-sinc-lr0p001-r0p1-random",
+      "dataset": "linear-sinc",
+      "learning_rate": 0.001,
+      "repulsion": 0.1,
+      "run": "results/suite/locations/random/linear-sinc/r0p1",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "linear-sinc-lr0p001-r1-random",
+      "dataset": "linear-sinc",
+      "learning_rate": 0.001,
+      "repulsion": 1.0,
+      "run": "results/suite/locations/random/linear-sinc/r1",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "linear-sinc-lr0p001-r10-random",
+      "dataset": "linear-sinc",
+      "learning_rate": 0.001,
+      "repulsion": 10.0,
+      "run": "results/suite/locations/random/linear-sinc/r10",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "square-wave-lr0p001-r0p001-random",
+      "dataset": "square-wave",
+      "learning_rate": 0.001,
+      "repulsion": 0.001,
+      "run": "results/suite/locations/random/square-wave/r0p001",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "square-wave-lr0p001-r0p01-random",
+      "dataset": "square-wave",
+      "learning_rate": 0.001,
+      "repulsion": 0.01,
+      "run": "results/suite/locations/random/square-wave/r0p01",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "square-wave-lr0p001-r0p1-random",
+      "dataset": "square-wave",
+      "learning_rate": 0.001,
+      "repulsion": 0.1,
+      "run": "results/suite/locations/random/square-wave/r0p1",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "square-wave-lr0p001-r1-random",
+      "dataset": "square-wave",
+      "learning_rate": 0.001,
+      "repulsion": 1.0,
+      "run": "results/suite/locations/random/square-wave/r1",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "square-wave-lr0p001-r10-random",
+      "dataset": "square-wave",
+      "learning_rate": 0.001,
+      "repulsion": 10.0,
+      "run": "results/suite/locations/random/square-wave/r10",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "shifted-sinc-lr0p001-r0p001-random",
+      "dataset": "shifted-sinc",
+      "learning_rate": 0.001,
+      "repulsion": 0.001,
+      "run": "results/suite/locations/random/shifted-sinc/r0p001",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "shifted-sinc-lr0p001-r0p01-random",
+      "dataset": "shifted-sinc",
+      "learning_rate": 0.001,
+      "repulsion": 0.01,
+      "run": "results/suite/locations/random/shifted-sinc/r0p01",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "shifted-sinc-lr0p001-r0p1-random",
+      "dataset": "shifted-sinc",
+      "learning_rate": 0.001,
+      "repulsion": 0.1,
+      "run": "results/suite/locations/random/shifted-sinc/r0p1",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "shifted-sinc-lr0p001-r1-random",
+      "dataset": "shifted-sinc",
+      "learning_rate": 0.001,
+      "repulsion": 1.0,
+      "run": "results/suite/locations/random/shifted-sinc/r1",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "shifted-sinc-lr0p001-r10-random",
+      "dataset": "shifted-sinc",
+      "learning_rate": 0.001,
+      "repulsion": 10.0,
+      "run": "results/suite/locations/random/shifted-sinc/r10",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "sine-lr0p001-r0p001-random",
+      "dataset": "sine",
+      "learning_rate": 0.001,
+      "repulsion": 0.001,
+      "run": "results/suite/locations/random/sine/r0p001",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "sine-lr0p001-r0p01-random",
+      "dataset": "sine",
+      "learning_rate": 0.001,
+      "repulsion": 0.01,
+      "run": "results/suite/locations/random/sine/r0p01",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "sine-lr0p001-r0p1-random",
+      "dataset": "sine",
+      "learning_rate": 0.001,
+      "repulsion": 0.1,
+      "run": "results/suite/locations/random/sine/r0p1",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "sine-lr0p001-r1-random",
+      "dataset": "sine",
+      "learning_rate": 0.001,
+      "repulsion": 1.0,
+      "run": "results/suite/locations/random/sine/r1",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "sine-lr0p001-r10-random",
+      "dataset": "sine",
+      "learning_rate": 0.001,
+      "repulsion": 10.0,
+      "run": "results/suite/locations/random/sine/r10",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "cosine-lr0p001-r0p001-random",
+      "dataset": "cosine",
+      "learning_rate": 0.001,
+      "repulsion": 0.001,
+      "run": "results/suite/locations/random/cosine/r0p001",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "cosine-lr0p001-r0p01-random",
+      "dataset": "cosine",
+      "learning_rate": 0.001,
+      "repulsion": 0.01,
+      "run": "results/suite/locations/random/cosine/r0p01",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "cosine-lr0p001-r0p1-random",
+      "dataset": "cosine",
+      "learning_rate": 0.001,
+      "repulsion": 0.1,
+      "run": "results/suite/locations/random/cosine/r0p1",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "cosine-lr0p001-r1-random",
+      "dataset": "cosine",
+      "learning_rate": 0.001,
+      "repulsion": 1.0,
+      "run": "results/suite/locations/random/cosine/r1",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "cosine-lr0p001-r10-random",
+      "dataset": "cosine",
+      "learning_rate": 0.001,
+      "repulsion": 10.0,
+      "run": "results/suite/locations/random/cosine/r10",
+      "repulsion_location": "random"
+    },
+    {
+      "id": "steps-lr0p001-r0p001-combined",
+      "dataset": "steps",
+      "learning_rate": 0.001,
+      "repulsion": 0.001,
+      "run": "results/suite/locations/combined/steps/r0p001",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "steps-lr0p001-r0p01-combined",
+      "dataset": "steps",
+      "learning_rate": 0.001,
+      "repulsion": 0.01,
+      "run": "results/suite/locations/combined/steps/r0p01",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "steps-lr0p001-r0p1-combined",
+      "dataset": "steps",
+      "learning_rate": 0.001,
+      "repulsion": 0.1,
+      "run": "results/suite/locations/combined/steps/r0p1",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "steps-lr0p001-r1-combined",
+      "dataset": "steps",
+      "learning_rate": 0.001,
+      "repulsion": 1.0,
+      "run": "results/suite/locations/combined/steps/r1",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "steps-lr0p001-r10-combined",
+      "dataset": "steps",
+      "learning_rate": 0.001,
+      "repulsion": 10.0,
+      "run": "results/suite/locations/combined/steps/r10",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "cubic-lr0p001-r0p001-combined",
+      "dataset": "cubic",
+      "learning_rate": 0.001,
+      "repulsion": 0.001,
+      "run": "results/suite/locations/combined/cubic/r0p001",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "cubic-lr0p001-r0p01-combined",
+      "dataset": "cubic",
+      "learning_rate": 0.001,
+      "repulsion": 0.01,
+      "run": "results/suite/locations/combined/cubic/r0p01",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "cubic-lr0p001-r0p1-combined",
+      "dataset": "cubic",
+      "learning_rate": 0.001,
+      "repulsion": 0.1,
+      "run": "results/suite/locations/combined/cubic/r0p1",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "cubic-lr0p001-r1-combined",
+      "dataset": "cubic",
+      "learning_rate": 0.001,
+      "repulsion": 1.0,
+      "run": "results/suite/locations/combined/cubic/r1",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "cubic-lr0p001-r10-combined",
+      "dataset": "cubic",
+      "learning_rate": 0.001,
+      "repulsion": 10.0,
+      "run": "results/suite/locations/combined/cubic/r10",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "forrester-lr0p001-r0p001-combined",
+      "dataset": "forrester",
+      "learning_rate": 0.001,
+      "repulsion": 0.001,
+      "run": "results/suite/locations/combined/forrester/r0p001",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "forrester-lr0p001-r0p01-combined",
+      "dataset": "forrester",
+      "learning_rate": 0.001,
+      "repulsion": 0.01,
+      "run": "results/suite/locations/combined/forrester/r0p01",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "forrester-lr0p001-r0p1-combined",
+      "dataset": "forrester",
+      "learning_rate": 0.001,
+      "repulsion": 0.1,
+      "run": "results/suite/locations/combined/forrester/r0p1",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "forrester-lr0p001-r1-combined",
+      "dataset": "forrester",
+      "learning_rate": 0.001,
+      "repulsion": 1.0,
+      "run": "results/suite/locations/combined/forrester/r1",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "forrester-lr0p001-r10-combined",
+      "dataset": "forrester",
+      "learning_rate": 0.001,
+      "repulsion": 10.0,
+      "run": "results/suite/locations/combined/forrester/r10",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "he-lr0p001-r0p001-combined",
+      "dataset": "he",
+      "learning_rate": 0.001,
+      "repulsion": 0.001,
+      "run": "results/suite/locations/combined/he/r0p001",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "he-lr0p001-r0p01-combined",
+      "dataset": "he",
+      "learning_rate": 0.001,
+      "repulsion": 0.01,
+      "run": "results/suite/locations/combined/he/r0p01",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "he-lr0p001-r0p1-combined",
+      "dataset": "he",
+      "learning_rate": 0.001,
+      "repulsion": 0.1,
+      "run": "results/suite/locations/combined/he/r0p1",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "he-lr0p001-r1-combined",
+      "dataset": "he",
+      "learning_rate": 0.001,
+      "repulsion": 1.0,
+      "run": "results/suite/locations/combined/he/r1",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "he-lr0p001-r10-combined",
+      "dataset": "he",
+      "learning_rate": 0.001,
+      "repulsion": 10.0,
+      "run": "results/suite/locations/combined/he/r10",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "amplitude-sine-lr0p001-r0p001-combined",
+      "dataset": "amplitude-sine",
+      "learning_rate": 0.001,
+      "repulsion": 0.001,
+      "run": "results/suite/locations/combined/amplitude-sine/r0p001",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "amplitude-sine-lr0p001-r0p01-combined",
+      "dataset": "amplitude-sine",
+      "learning_rate": 0.001,
+      "repulsion": 0.01,
+      "run": "results/suite/locations/combined/amplitude-sine/r0p01",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "amplitude-sine-lr0p001-r0p1-combined",
+      "dataset": "amplitude-sine",
+      "learning_rate": 0.001,
+      "repulsion": 0.1,
+      "run": "results/suite/locations/combined/amplitude-sine/r0p1",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "amplitude-sine-lr0p001-r1-combined",
+      "dataset": "amplitude-sine",
+      "learning_rate": 0.001,
+      "repulsion": 1.0,
+      "run": "results/suite/locations/combined/amplitude-sine/r1",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "amplitude-sine-lr0p001-r10-combined",
+      "dataset": "amplitude-sine",
+      "learning_rate": 0.001,
+      "repulsion": 10.0,
+      "run": "results/suite/locations/combined/amplitude-sine/r10",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "linear-sinc-lr0p001-r0p001-combined",
+      "dataset": "linear-sinc",
+      "learning_rate": 0.001,
+      "repulsion": 0.001,
+      "run": "results/suite/locations/combined/linear-sinc/r0p001",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "linear-sinc-lr0p001-r0p01-combined",
+      "dataset": "linear-sinc",
+      "learning_rate": 0.001,
+      "repulsion": 0.01,
+      "run": "results/suite/locations/combined/linear-sinc/r0p01",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "linear-sinc-lr0p001-r0p1-combined",
+      "dataset": "linear-sinc",
+      "learning_rate": 0.001,
+      "repulsion": 0.1,
+      "run": "results/suite/locations/combined/linear-sinc/r0p1",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "linear-sinc-lr0p001-r1-combined",
+      "dataset": "linear-sinc",
+      "learning_rate": 0.001,
+      "repulsion": 1.0,
+      "run": "results/suite/locations/combined/linear-sinc/r1",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "linear-sinc-lr0p001-r10-combined",
+      "dataset": "linear-sinc",
+      "learning_rate": 0.001,
+      "repulsion": 10.0,
+      "run": "results/suite/locations/combined/linear-sinc/r10",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "square-wave-lr0p001-r0p001-combined",
+      "dataset": "square-wave",
+      "learning_rate": 0.001,
+      "repulsion": 0.001,
+      "run": "results/suite/locations/combined/square-wave/r0p001",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "square-wave-lr0p001-r0p01-combined",
+      "dataset": "square-wave",
+      "learning_rate": 0.001,
+      "repulsion": 0.01,
+      "run": "results/suite/locations/combined/square-wave/r0p01",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "square-wave-lr0p001-r0p1-combined",
+      "dataset": "square-wave",
+      "learning_rate": 0.001,
+      "repulsion": 0.1,
+      "run": "results/suite/locations/combined/square-wave/r0p1",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "square-wave-lr0p001-r1-combined",
+      "dataset": "square-wave",
+      "learning_rate": 0.001,
+      "repulsion": 1.0,
+      "run": "results/suite/locations/combined/square-wave/r1",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "square-wave-lr0p001-r10-combined",
+      "dataset": "square-wave",
+      "learning_rate": 0.001,
+      "repulsion": 10.0,
+      "run": "results/suite/locations/combined/square-wave/r10",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "shifted-sinc-lr0p001-r0p001-combined",
+      "dataset": "shifted-sinc",
+      "learning_rate": 0.001,
+      "repulsion": 0.001,
+      "run": "results/suite/locations/combined/shifted-sinc/r0p001",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "shifted-sinc-lr0p001-r0p01-combined",
+      "dataset": "shifted-sinc",
+      "learning_rate": 0.001,
+      "repulsion": 0.01,
+      "run": "results/suite/locations/combined/shifted-sinc/r0p01",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "shifted-sinc-lr0p001-r0p1-combined",
+      "dataset": "shifted-sinc",
+      "learning_rate": 0.001,
+      "repulsion": 0.1,
+      "run": "results/suite/locations/combined/shifted-sinc/r0p1",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "shifted-sinc-lr0p001-r1-combined",
+      "dataset": "shifted-sinc",
+      "learning_rate": 0.001,
+      "repulsion": 1.0,
+      "run": "results/suite/locations/combined/shifted-sinc/r1",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "shifted-sinc-lr0p001-r10-combined",
+      "dataset": "shifted-sinc",
+      "learning_rate": 0.001,
+      "repulsion": 10.0,
+      "run": "results/suite/locations/combined/shifted-sinc/r10",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "sine-lr0p001-r0p001-combined",
+      "dataset": "sine",
+      "learning_rate": 0.001,
+      "repulsion": 0.001,
+      "run": "results/suite/locations/combined/sine/r0p001",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "sine-lr0p001-r0p01-combined",
+      "dataset": "sine",
+      "learning_rate": 0.001,
+      "repulsion": 0.01,
+      "run": "results/suite/locations/combined/sine/r0p01",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "sine-lr0p001-r0p1-combined",
+      "dataset": "sine",
+      "learning_rate": 0.001,
+      "repulsion": 0.1,
+      "run": "results/suite/locations/combined/sine/r0p1",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "sine-lr0p001-r1-combined",
+      "dataset": "sine",
+      "learning_rate": 0.001,
+      "repulsion": 1.0,
+      "run": "results/suite/locations/combined/sine/r1",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "sine-lr0p001-r10-combined",
+      "dataset": "sine",
+      "learning_rate": 0.001,
+      "repulsion": 10.0,
+      "run": "results/suite/locations/combined/sine/r10",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "cosine-lr0p001-r0p001-combined",
+      "dataset": "cosine",
+      "learning_rate": 0.001,
+      "repulsion": 0.001,
+      "run": "results/suite/locations/combined/cosine/r0p001",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "cosine-lr0p001-r0p01-combined",
+      "dataset": "cosine",
+      "learning_rate": 0.001,
+      "repulsion": 0.01,
+      "run": "results/suite/locations/combined/cosine/r0p01",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "cosine-lr0p001-r0p1-combined",
+      "dataset": "cosine",
+      "learning_rate": 0.001,
+      "repulsion": 0.1,
+      "run": "results/suite/locations/combined/cosine/r0p1",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "cosine-lr0p001-r1-combined",
+      "dataset": "cosine",
+      "learning_rate": 0.001,
+      "repulsion": 1.0,
+      "run": "results/suite/locations/combined/cosine/r1",
+      "repulsion_location": "combined"
+    },
+    {
+      "id": "cosine-lr0p001-r10-combined",
+      "dataset": "cosine",
+      "learning_rate": 0.001,
+      "repulsion": 10.0,
+      "run": "results/suite/locations/combined/cosine/r10",
+      "repulsion_location": "combined"
     }
   ]
 }

@@ -1,0 +1,193 @@
+{
+  "dataset_sha256": "f46613cdab17e5783a3a843fb1aa0036012cd8c8fafb32c93f998c9624678f82",
+  "methods": [
+    "bdkn",
+    "deep_ensemble",
+    "dkl",
+    "forde",
+    "frde",
+    "gp",
+    "ldbll",
+    "vbll",
+    "wrde"
+  ],
+  "predictions": [
+    "bdkn",
+    "deep_ensemble",
+    "frde_ensemble",
+    "frde",
+    "wrde_ensemble",
+    "wrde",
+    "forde_ensemble",
+    "forde",
+    "gp",
+    "dkl",
+    "ldbll",
+    "vbll"
+  ],
+  "history_charts": [
+    {
+      "method": "bdkn",
+      "name": "bdkn_history",
+      "caption": "BDKN \u00b7 Stage 1 \u00b7 ensemble training",
+      "log_y_scale": "symlog",
+      "points": 2000,
+      "stage": "Stage 1 \u00b7 ensemble training"
+    },
+    {
+      "method": "bdkn",
+      "name": "bdkn_stage2_history",
+      "caption": "BDKN \u00b7 Stage 2 \u00b7 Bayesian marginal NLL",
+      "log_y_scale": "symlog",
+      "points": 100,
+      "stage": "Stage 2 \u00b7 Bayesian marginal NLL"
+    },
+    {
+      "method": "deep_ensemble",
+      "name": "deep_ensemble_history",
+      "caption": "Deep ensemble \u00b7 Stage 1 \u00b7 ensemble training",
+      "log_y_scale": "symlog",
+      "points": 2000,
+      "stage": "Stage 1 \u00b7 ensemble training"
+    },
+    {
+      "method": "dkl",
+      "name": "dkl_history",
+      "caption": "DKL \u00b7 Training history",
+      "log_y_scale": "symlog",
+      "points": 10000,
+      "stage": "Training history"
+    },
+    {
+      "method": "forde",
+      "name": "forde_history",
+      "caption": "First-order repulsion \u00b7 BDKN \u00b7 Stage 1 \u00b7 ensemble training",
+      "log_y_scale": "symlog",
+      "points": 2000,
+      "stage": "Stage 1 \u00b7 ensemble training"
+    },
+    {
+      "method": "forde",
+      "name": "forde_repulsion_history",
+      "caption": "First-order repulsion \u00b7 BDKN \u00b7 Repulsion loss R (unweighted)",
+      "log_y_scale": "log",
+      "points": 2000,
+      "stage": "Repulsion loss R (unweighted)"
+    },
+    {
+      "method": "forde",
+      "name": "forde_stage2_history",
+      "caption": "First-order repulsion \u00b7 BDKN \u00b7 Stage 2 \u00b7 Bayesian marginal NLL",
+      "log_y_scale": "symlog",
+      "points": 100,
+      "stage": "Stage 2 \u00b7 Bayesian marginal NLL"
+    },
+    {
+      "method": "frde",
+      "name": "frde_history",
+      "caption": "Functional repulsion \u00b7 BDKN \u00b7 Stage 1 \u00b7 ensemble training",
+      "log_y_scale": "symlog",
+      "points": 2000,
+      "stage": "Stage 1 \u00b7 ensemble training"
+    },
+    {
+      "method": "frde",
+      "name": "frde_repulsion_history",
+      "caption": "Functional repulsion \u00b7 BDKN \u00b7 Repulsion loss R (unweighted)",
+      "log_y_scale": "log",
+      "points": 2000,
+      "stage": "Repulsion loss R (unweighted)"
+    },
+    {
+      "method": "frde",
+      "name": "frde_stage2_history",
+      "caption": "Functional repulsion \u00b7 BDKN \u00b7 Stage 2 \u00b7 Bayesian marginal NLL",
+      "log_y_scale": "symlog",
+      "points": 100,
+      "stage": "Stage 2 \u00b7 Bayesian marginal NLL"
+    },
+    {
+      "method": "gp",
+      "name": "gp_history",
+      "caption": "GP \u00b7 Training history",
+      "log_y_scale": "log",
+      "points": 2000,
+      "stage": "Training history"
+    },
+    {
+      "method": "ldbll",
+      "name": "ldbll_history",
+      "caption": "LDBLL \u00b7 Training history",
+      "log_y_scale": "log",
+      "points": 10000,
+      "stage": "Training history"
+    },
+    {
+      "method": "vbll",
+      "name": "vbll_history",
+      "caption": "VBLL \u00b7 Training history",
+      "log_y_scale": "log",
+      "points": 2000,
+      "stage": "Training history"
+    },
+    {
+      "method": "wrde",
+      "name": "wrde_history",
+      "caption": "Weight repulsion \u00b7 BDKN \u00b7 Stage 1 \u00b7 ensemble training",
+      "log_y_scale": "symlog",
+      "points": 2000,
+      "stage": "Stage 1 \u00b7 ensemble training"
+    },
+    {
+      "method": "wrde",
+      "name": "wrde_repulsion_history",
+      "caption": "Weight repulsion \u00b7 BDKN \u00b7 Repulsion loss R (unweighted)",
+      "log_y_scale": "log",
+      "points": 2000,
+      "stage": "Repulsion loss R (unweighted)"
+    },
+    {
+      "method": "wrde",
+      "name": "wrde_stage2_history",
+      "caption": "Weight repulsion \u00b7 BDKN \u00b7 Stage 2 \u00b7 Bayesian marginal NLL",
+      "log_y_scale": "symlog",
+      "points": 100,
+      "stage": "Stage 2 \u00b7 Bayesian marginal NLL"
+    }
+  ],
+  "observation_modes": [
+    "train",
+    "test",
+    "both",
+    "none"
+  ],
+  "device": "cuda:0 / cuda:1",
+  "experiment_id": "shifted-sinc-lr0p001-r0p1-random",
+  "repulsion_location": "random",
+  "source_prediction_sha256": {
+    "bdkn": "999d89a71230ce3b0d9890e97a0e6e696c94f56c5464fae440e6fc8e321920ce",
+    "deep_ensemble": "4927eee2db771ee38cb322d1de9f24dd976e618b01b9b371bf690779bebae0e1",
+    "dkl": "855789eb7851bfe0547234e1c5bd814f55238158d1e337c616c965d7b2da5c9c",
+    "forde_ensemble": "07883468440ac2e38ea22a2cd4e70ab684fb0fa0fc33f1e55d04794ac5b618a6",
+    "forde": "192ec23bc217560affb031643ee72efe4016091f72063a1ff0e64f795888e38b",
+    "frde_ensemble": "e56165cc890b3876ecd634dda8a290905d8e1a99d59c2c5f4c3f27acf0b6ac1a",
+    "frde": "8867d6851f99800f080312a509444574d949aef5d47803279e1ff6562018a7e6",
+    "gp": "70689fbed76fc9875fb16be302479eee187389a685ea232453b825b189a4ea7c",
+    "ldbll": "82100423d43c694cc0a576092b5d88f3584fa6dfb36ab5e1eddf390e4ccea322",
+    "vbll": "0e9926ce7853725350dba8b71ace9e94b0f59b5cd0dc4621e5244bf0cedd0b0e",
+    "wrde_ensemble": "90e1c318afcceb707be3b0c9a3ce3f34e365a905f63d90f234eb53597fcb4871",
+    "wrde": "8d7f30c700f06f939a8254488d86f771b87b7b5d6bd7ec79d76122c9b770b875"
+  },
+  "source_history_sha256": {
+    "bdkn": "4a41bf749709897f64d46a0f1d1126491eb9347470b30e0cf0f4f4ec91d091b4",
+    "deep_ensemble": "f84e790204e7b108b39675546dac58325ac38c047dc94a133b0721b26faca20d",
+    "dkl": "20a9e573ac2fa53ae429b2bc407812b129fef651020ee3613d250c691faff806",
+    "forde": "1881ec039f1aee0ac042f434839d4816d75b7636e9988466b2353041cceb4e9c",
+    "frde": "a272c7d26512b4a932fb1d61f526e4111402554101a94451f48a24da86f6d7c1",
+    "gp": "8ca5c1a834321273c72953c9980fb3c03e404ab6fe85542d3d0f421ae5b0f741",
+    "ldbll": "9493cbae08eda1ba25eaadba45ad9d5aa254d16440dce564b68a0aa8170045aa",
+    "vbll": "838a5f8e098796dc2a02a30406f6627a856d47f61f39a4ef66c3bf697fcbc4f3",
+    "wrde": "611e39e75dd137588af8a89402d236f82cf681fb71422b3cf81b1dd06254cf19"
+  },
+  "generated_at": "2026-11-16T02:01:00.760004+00:00"
+}

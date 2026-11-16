@@ -188,5 +188,6 @@
     "vbll": "24283a533c69d5180c756ee8dd9c4ac9de05efe569a3a41484f45d0b49a1c132",
     "wrde": "6a36f5043afd6345c81ca8a6f96392c61fadd00a078dcf462c0d93e39008fe31"
   },
-  "generated_at": "2026-11-15T22:35:22.859959+00:00"
+  "generated_at": "2026-11-15T22:35:22.859959+00:00",
+  "repulsion_location": "training"
 }

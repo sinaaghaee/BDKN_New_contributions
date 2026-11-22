@@ -1,0 +1,26 @@
+[
+  {
+    "method": "frde_ensemble",
+    "rmse": 0.24808666909920696,
+    "nll": -0.24539535140723223,
+    "predictive_family": "gaussian",
+    "seconds": 25.464058090932667,
+    "dataset_sha256": "e6755bb90e05c16e6529f9da3a77390485675f0ca2493c8b3070599b6e5793af",
+    "training_seconds": 24.779602508991957,
+    "stage1_training_seconds": 24.779602508991957,
+    "stage2_training_seconds": 0.0,
+    "training_reused": false
+  },
+  {
+    "method": "frde",
+    "rmse": 0.2480577412664903,
+    "nll": -0.2450467776148313,
+    "predictive_family": "student_t",
+    "seconds": 25.779032814782113,
+    "dataset_sha256": "e6755bb90e05c16e6529f9da3a77390485675f0ca2493c8b3070599b6e5793af",
+    "training_seconds": 24.923215220915154,
+    "stage1_training_seconds": 24.779602508991957,
+    "stage2_training_seconds": 0.1436127119231969,
+    "training_reused": false
+  }
+]

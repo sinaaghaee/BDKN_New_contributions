@@ -1,0 +1,21 @@
+{
+  "seed": 123,
+  "device": "cuda:1",
+  "cpu_threads": 1,
+  "data_path": "/home/grads/s/sina.aghaee/PycharmProjects/BDKN_New_contributions/data/amplitude-sine.npz",
+  "output_root": "results",
+  "epochs": 2000,
+  "lr": 0.001,
+  "batch_size": 32,
+  "n_nets": 5,
+  "hidden_dim": 50,
+  "hidden_layers": 2,
+  "activation": "ReLU",
+  "norm_type": "none",
+  "jitter_eps": 1e-06,
+  "normalize_x": true,
+  "x_norm_type": "standard",
+  "normalize_y": false,
+  "dataset_sha256": "a5e1ea6b11be7205d6598057c1aabc755aa0a0159150e1df54e490b6513bbe16",
+  "reuse_stage1": "/home/grads/s/sina.aghaee/PycharmProjects/BDKN_New_contributions/results/suite/amplitude-sine/r0p001/bdkn/stage1.pt"
+}

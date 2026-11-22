@@ -1,0 +1,14 @@
+[
+  {
+    "method": "deep_ensemble",
+    "rmse": 1.2349801757893997,
+    "nll": 697.1734224403044,
+    "predictive_family": "gaussian",
+    "seconds": 0.04151059198193252,
+    "dataset_sha256": "2bb3f97c933dbd4d7155b4574613bd9daab7cbba9ca86b8ea1893232351847a4",
+    "training_seconds": 5.881393763935193,
+    "stage1_training_seconds": 5.881393763935193,
+    "stage2_training_seconds": 0.0,
+    "training_reused": true
+  }
+]

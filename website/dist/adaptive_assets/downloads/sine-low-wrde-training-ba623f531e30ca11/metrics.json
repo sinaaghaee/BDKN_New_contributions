@@ -1,0 +1,26 @@
+[
+  {
+    "method": "adaptive_wrde_ensemble",
+    "rmse": 0.17190565649543896,
+    "nll": -0.031166214174537882,
+    "predictive_family": "gaussian",
+    "seconds": 514.0510832518339,
+    "dataset_sha256": "e6755bb90e05c16e6529f9da3a77390485675f0ca2493c8b3070599b6e5793af",
+    "training_seconds": 513.7979382481426,
+    "stage1_training_seconds": 513.7979382481426,
+    "stage2_training_seconds": 0.0,
+    "training_reused": false
+  },
+  {
+    "method": "adaptive_wrde",
+    "rmse": 0.18011788852772234,
+    "nll": 0.08029506444263396,
+    "predictive_family": "student_t",
+    "seconds": 516.5056142620742,
+    "dataset_sha256": "e6755bb90e05c16e6529f9da3a77390485675f0ca2493c8b3070599b6e5793af",
+    "training_seconds": 515.8118560058065,
+    "stage1_training_seconds": 513.7979382481426,
+    "stage2_training_seconds": 2.013917757663876,
+    "training_reused": false
+  }
+]

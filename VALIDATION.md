@@ -1,5 +1,16 @@
 # Validation — regression comparison
 
+## Adaptive extension — 2026-11-18
+
+- Added independent functional, weight, and input-gradient constrained-diversity scripts; existing fixed-weight model files and the source repository are unchanged.
+- 33 tests pass across adaptive mathematics, reference sampling, existing method mathematics, dataset contracts, fixed-result matching, and report handling.
+- Explicit pairwise calculations and finite differences verify full similarity gradients. Tests cover multiplier direction/nonnegativity, frozen initialization quantities, independent reference RNG, model-precision exclusions, and independence from test targets.
+- All 14 two-epoch GPU 0 smoke fits completed with three Bayesian steps, covering all methods/locations and both learning rates. Both prediction stages have finite metrics and valid saved predictions.
+- Re-running the smoke matrix starts no trainers. Modified saved artifacts are rejected by hash validation. A separate SIGTERM check confirms that the runner stops its own child and preserves the attempted output for inspection.
+- Headless Chrome checks pass for direct `file://` operation across all ten datasets, both settings, reference locations, DE/BDKN, all five fixed baseline weights, observation modes, and loss scales. No network assets are requested; equations render locally, downloads are local, and selections survive reloads.
+- The full 140-fit suite is launched on GPU 0 with automatic report updates. Following the user's concurrency change, `WORKERS='all'` admits as many fits as memory permits, reserving 450 MiB per fit and 2 GiB of headroom; capacity is checked every five seconds. The clean controller restart preserved 67 completed fits. A mocked-memory test verifies admission accounts for starting contexts and excludes other jobs' allocations. The live status and completed metrics are in `results/adaptive/manifest.json` and `website/dist/adaptive.html`; this section does not claim the full suite has finished.
+- Constraint violations remain visible, including short high-rate runs that do not satisfy the target. No automatic target relaxation or convergence/calibration guarantee is introduced.
+
 Completed 2026-11-15 with NVIDIA GeForce RTX 3090 GPUs.
 
 ## Completed fits
@@ -69,3 +80,11 @@ The random sampler uses an independent CPU generator, redraws each optimizer ste
 All 44 numerical/source/suite/aggregation/location tests passed. Fit validation checked 2,700 registered method references, budgets, shared datasets, histories, checkpoints, baseline costs, and independently recomputed RMSE/NLL. Offline checks passed 3,000 HTML pages, 300 profiles, 3,600 metric rows, and 68 rendered LaTeX expressions. Executable controls passed all loss-axis/observation combinations, location navigation, location preservation across dataset/LR/weight changes, method filters, and aggregation controls. Aggregation diagnostics cover 720 unique saved fits and 1,200 profile/variant references. The site contains 100 location-comparison groups and 27,830 unique shared plot assets. No correlation plots remain; mean-weighted contribution panels retain the “Sum” legend. Every bundled file is below GitHub’s single-file limit.
 
 The full offline report remains `website/dist/index.html` (also accessible through the repository-root `index.html`). This extension does not change the separately hosted private Site; browser-layout inspection remains unavailable as previously recorded.
+
+## FoRDE raw-gradient ablation
+
+Added `forde_raw.py` alongside the unchanged normalized implementation. The original fixed-weight KDE uses raw input-gradient fields; stop-gradient references, bandwidth calculation, self terms, sampling and Bayesian aggregation are retained. All 300 selected configurations match their saved normalized reference settings (ten datasets, both LR budgets, five weights and three input locations). Each fit produces DE and BDKN predictions. Dataset and source hashes, full budgets, finite artifacts and completion markers are checked before reuse.
+
+Six raw-gradient tests passed, including explicit float64 loss/backward equivalence, unused normalization epsilon, zero-strength likelihood equivalence, sampling parity, all matched configurations and simultaneous allocation-failure retries. The preceding broader regression run passed 39 tests. Six CPU smoke fits and six full 40-epoch GPU-0 validation fits completed successfully; verified GPU fits were reused in the production selection. The 300-fit production run is in progress, with memory-aware concurrent admission on GPU 0 only; its manifest records live completion status.
+
+The dedicated offline page compares original, normalized FoRDE and raw FoRDE, showing DE and BDKN together in every metric table. Real-browser checks passed dataset/LR/weight/location/observation/stage controls, signed logarithmic loss axes, local downloads, rendered equations and reload persistence, with no external asset requests or JavaScript errors. The report refreshes as production results complete.

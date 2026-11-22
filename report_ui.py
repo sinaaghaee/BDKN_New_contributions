@@ -158,6 +158,8 @@ def page(ctx,title,filename,body):
     controls+=choices('location-select','Repulsion location',[(v,{'training':'Training','random':'Random','combined':'Training + random'}[v]) for v in locations],entry['repulsion_location'])
     links=[('index.html','Results'),('figures.html','Predictions'),('de_bdkn_results.html','DE ↔ BDKN'),('repulsion.html','Compare weights'),('locations.html','Compare locations'),('losses.html','Losses'),('aggregation.html','Aggregation weights'),('dataset.html','Data'),('settings.html','Settings')]
     nav=''.join(f'<a href="{file}"'+(' aria-current="page"' if filename==file else '')+f'>{label}</a>' for file,label in links)
+    nav+=f'<a data-adaptive-nav href="{prefix}adaptive.html">Adaptive repulsion</a>'
+    nav+=f'<a data-forde-raw-nav href="{prefix}forde_gradients.html">Gradient normalization</a>'
     state=json.dumps(dict(experiments=catalog,datasets={k:v['label'] for k,v in datasets.items()},active=entry['id'],root=prefix,page=filename)).replace('<','\\u003c')
     math_head=f'<link rel="stylesheet" href="{prefix}vendor/katex/katex.min.css">' if filename in ('losses.html','repulsion.html','dataset.html','aggregation.html') else ''
     math_script=f'<script src="{prefix}vendor/katex/katex.min.js"></script>' if math_head else ''

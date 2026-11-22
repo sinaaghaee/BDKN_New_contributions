@@ -56,5 +56,31 @@
     "BLLN/Benchamrk/LDBLL/training_viz.py": "8aea33b55a9366e8fd7561f0e98064893137e06e76ea942c5656cc833f82a885",
     "BLLN/Benchamrk/LDBLL/bayes_opt.py": "5794972e1faa0c3d9b33a80d90106abbe2a121e81d67892934b56d693fe584c4",
     "BLLN/Benchamrk/LDBLL/toy_problem_multivariate.py": "2b77ee6746ef864c1686621935814a52ce5e258ece0eea7466291a89948ba2b1"
+  },
+  "adaptive_extension": {
+    "scripts": [
+      "adaptive_frde.py",
+      "adaptive_wrde.py",
+      "adaptive_forde.py"
+    ],
+    "description": "Proposed constrained-diversity extensions; existing KDE repulsion methods unchanged. Local toy network and BDKN definitions retained.",
+    "objective": "Sum of per-head mean Gaussian NLL + lambda*(mean off-diagonal fixed-bandwidth RBF similarity - target)",
+    "reference_policy": "Fixed training/random-domain/combined inputs; weight repulsion is input-independent. Random inputs exclude all training inputs in model precision.",
+    "gradient_policy": "Full derivatives through both particles; fixed reference inputs, initialization bandwidth and target.",
+    "controller": "Nonnegative projected multiplier ascent after each epoch; target ratio and optimizer step size are experimental choices.",
+    "references": {
+      "constrained_optimization": "https://web.stanford.edu/~boyd/cvxbook/",
+      "adaptive_multiplier_precedent": "https://arxiv.org/abs/1812.05905",
+      "input_gradient_representation": "https://arxiv.org/abs/2306.02775"
+    },
+    "limitations": "No asserted global convergence for neural-network training, automatic posterior inference, or guaranteed calibration improvement."
+  },
+  "forde_raw_ablation": {
+    "script": "forde_raw.py",
+    "reference": "forde.py",
+    "change": "Use raw mean-function input-gradient fields instead of unit-normalized fields in the original fixed-weight KDE repulsion.",
+    "unchanged": "Detached reference particles and median bandwidths, self terms, KDE reductions, sampling, likelihood, model architecture and Bayesian aggregation.",
+    "matched_settings": "run_forde_raw.py resolves each setting from its saved normalized FoRDE configuration; records model, dataset and reference configuration hashes.",
+    "report": "website/dist/forde_gradients.html"
   }
 }

@@ -1,0 +1,20 @@
+{
+  "created": "2026-11-19T14:26:58.353127-06:00",
+  "benchmark_splits": 7314,
+  "benchmark_dataset_means": 614,
+  "other_method_comparisons": 550,
+  "archived_variant_comparisons": 318,
+  "sweep_status": {
+    "domain": {
+      "running": 18,
+      "complete": 47,
+      "pending": 41,
+      "reused": 38
+    },
+    "adaptive": {
+      "complete": 33
+    }
+  },
+  "sweep_errors": [],
+  "toy_export_rows": 4410
+}

@@ -1,0 +1,21 @@
+{
+  "seed": 123,
+  "device": "cuda:0",
+  "cpu_threads": 1,
+  "data_path": "/home/grads/s/sina.aghaee/PycharmProjects/BDKN_New_contributions/data/shifted-sinc.npz",
+  "output_root": "results",
+  "epochs": 2000,
+  "lr": 0.001,
+  "batch_size": 32,
+  "n_nets": 5,
+  "hidden_dim": 50,
+  "hidden_layers": 2,
+  "activation": "ReLU",
+  "norm_type": "none",
+  "jitter_eps": 1e-06,
+  "normalize_x": true,
+  "x_norm_type": "standard",
+  "normalize_y": false,
+  "dataset_sha256": "f46613cdab17e5783a3a843fb1aa0036012cd8c8fafb32c93f998c9624678f82",
+  "reuse_stage1": "/home/grads/s/sina.aghaee/PycharmProjects/BDKN_New_contributions/results/suite/shifted-sinc/r0p001/bdkn/stage1.pt"
+}

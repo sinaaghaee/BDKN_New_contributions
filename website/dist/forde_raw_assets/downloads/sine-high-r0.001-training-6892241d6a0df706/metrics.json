@@ -1,0 +1,26 @@
+[
+  {
+    "method": "forde_raw_ensemble",
+    "rmse": 0.5771117464720926,
+    "nll": 0.7514569708055359,
+    "predictive_family": "gaussian",
+    "seconds": 8.144785186741501,
+    "dataset_sha256": "e6755bb90e05c16e6529f9da3a77390485675f0ca2493c8b3070599b6e5793af",
+    "training_seconds": 6.740925913210958,
+    "stage1_training_seconds": 6.740925913210958,
+    "stage2_training_seconds": 0.0,
+    "training_reused": false
+  },
+  {
+    "method": "forde_raw",
+    "rmse": 0.4427017227269011,
+    "nll": 3.2024517864468636,
+    "predictive_family": "student_t",
+    "seconds": 10.47463027201593,
+    "dataset_sha256": "e6755bb90e05c16e6529f9da3a77390485675f0ca2493c8b3070599b6e5793af",
+    "training_seconds": 8.657633487135172,
+    "stage1_training_seconds": 6.740925913210958,
+    "stage2_training_seconds": 1.9167075739242136,
+    "training_reused": false
+  }
+]

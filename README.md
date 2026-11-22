@@ -6,6 +6,84 @@ Standalone implementations from `BDKN_Experiments`, evaluated on ten scalar 1D d
 
 ## Run
 
+### Adaptive repulsion
+
+`adaptive_frde.py`, `adaptive_wrde.py`, and `adaptive_forde.py` are self-contained
+constrained-diversity extensions. Their editable `CONFIG` dictionaries are at the
+top. Existing KDE methods and saved fixed-weight results are unchanged.
+
+`run_adaptive.py` selects datasets, low/high training settings, reference inputs,
+GPU, and worker count. Defaults cover all ten datasets, LR 0.001 / 2,000 epochs
+and LR 0.1 / 40 epochs, using GPU 0 with all selected fits admitted as memory
+permits. Each standalone process reserves 450 MiB before its CUDA context starts;
+2 GiB remains reserved. GPU memory is checked every five seconds and queued fits
+start as capacity becomes available. Set `WORKERS` to a positive integer to impose
+an explicit limit, or leave it as `'all'`. High-rate jobs run
+first. Bayesian aggregation retains 100 steps at LR 0.1. Functional and FoRDE
+use training/random/combined references; weight repulsion runs once, giving 140
+fits and 280 DE/BDKN results. `--dry-run` lists jobs without writing results;
+`--report-only` refreshes the website without training. Completed fits are
+validated before reuse; incomplete attempts are archived rather than overwritten.
+
+Each adaptive method minimizes the existing data-fit NLL subject to an average
+off-diagonal RBF similarity target. The bandwidth is the initialization median
+off-diagonal squared distance (floor 1e-6), then frozen. The target is 80% of
+initial similarity. Both particles receive full pairwise gradients. The
+nonnegative multiplier starts at zero and is updated once after each epoch with
+step size 0.1. These target/bandwidth/update choices are experimental settings,
+not theory-derived optimal values. FoRDE uses the normalized whole 1D derivative
+field, with epsilon 1e-8. References are fixed for the entire fit; random references
+exclude every training input in model precision and use an independent RNG.
+
+The mathematical basis is Lagrangian primal–dual optimization:
+[Boyd–Vandenberghe, Chapter 5](https://web.stanford.edu/~boyd/cvxbook/).
+[Haarnoja et al., Section 5](https://arxiv.org/abs/1812.05905) supplies precedent
+for adapting a regularization multiplier; [Trinh et al.](https://arxiv.org/abs/2306.02775)
+motivates input-gradient repulsion. This exact combination is a proposed method;
+global convergence and improved uncertainty calibration are not guaranteed.
+
+Open `website/dist/adaptive.html` for the offline adaptive comparison. It shows
+matching saved originals and fixed-weight methods, adaptive DE/BDKN predictions,
+metric tables, both training stages, multiplier trajectories, and actual
+constraint satisfaction. Missing or incompatible fits are marked explicitly.
+The runner refreshes this page as results finish; active pages refresh every two
+minutes and retain their selections. CSV histories, predictions, references, and
+configurations are copied into the report so it works independently of `results/`.
+Loss controls use signed-log axes for zero/negative values; hover shows raw values.
+Plotly SVG export and KaTeX assets are vendored locally with their licenses.
+
+### FoRDE without gradient normalization
+
+`forde_raw.py` is a self-contained ablation of the fixed-weight FoRDE method.
+It uses the input derivatives directly instead of dividing their complete 1D
+slope field by its L2 norm. The 1D reshape, KDE bandwidth rule, detached references,
+self terms, Gaussian likelihood, sampling, input preprocessing, architecture,
+and Bayesian second stage retain the original settings. The normalization epsilon
+is retained as an unused compatibility setting; it does not affect this variant.
+
+`run_forde_raw.py` matches every selected configuration to its saved normalized
+FoRDE reference. Defaults cover all ten datasets, both existing learning-rate
+settings, weights 0.001/0.01/0.1/1/10 and Training/Random/Both: 300 raw-gradient
+fits, each producing DE and BDKN predictions. Low-rate fits retain 2,000 epochs;
+high-rate fits use LR 0.1 and 40 epochs. Bayesian budgets and all other scientific
+parameters are copied from the matched reference. Only raw-gradient models train.
+
+The runner uses GPU 0 with memory admission, automatically retries GPU allocation
+failures with cooldown and a larger reservation, validates completed fits before
+reuse, and preserves incomplete attempts in an archive. Its settings are at the
+top; `--dry-run` reads without training/writing, and `--report-only` updates the
+website without requiring a GPU. Results are under `results/forde_raw`.
+
+The existing offline site adds `website/dist/forde_gradients.html`, linked as
+Gradient normalization. Original, normalized and raw FoRDE each show DE/BDKN
+columns together, with green-to-red metric tables, aligned prediction intervals,
+observation controls, KDE loss, both training stages, log/signed-log axes, local
+LaTeX definitions and inspectable configurations/downloads. Missing or budget-
+mismatched references are unavailable. Reports refresh as fits finish and retain
+the selected controls. No server or network assets are required.
+
+### Existing fixed-weight experiments
+
 ```bash
 python -m pip install -r requirements.txt
 python run_all.py --device cuda:0 --output results/my_run

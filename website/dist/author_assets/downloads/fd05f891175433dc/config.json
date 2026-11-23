@@ -1,0 +1,28 @@
+{
+  "seed": 123,
+  "device": "cuda:0",
+  "cpu_threads": 1,
+  "data_path": "/home/grads/s/sina.aghaee/PycharmProjects/BDKN_New_contributions/data/author-xsine.npz",
+  "output_root": "results",
+  "epochs": 10000,
+  "lr": 0.001,
+  "normalize_input": true,
+  "input_norm_type": "whiten",
+  "normalize_output": true,
+  "hidden_dims": [
+    50,
+    50
+  ],
+  "hidden_bias": true,
+  "activation": "leaky_relu",
+  "linear": false,
+  "bias": false,
+  "optimize_prior": true,
+  "latent_derivatives": true,
+  "scaling_factor": 1.0,
+  "fixed_noise_prior": false,
+  "add_epsilon_noise": true,
+  "gamma": 0.01,
+  "dataset_sha256": "a3549026187a5c094abc85846787d4454e8cf01e6120e43a57e93dfb874f93ca",
+  "reuse_stage1": null
+}

@@ -1,0 +1,19 @@
+{
+  "seed": 123,
+  "device": "cuda:0",
+  "cpu_threads": 1,
+  "data_path": "/home/grads/s/sina.aghaee/PycharmProjects/BDKN_New_contributions/data/cubic.npz",
+  "output_root": "results",
+  "epochs": 40,
+  "lr": 0.1,
+  "normalize_input": true,
+  "input_norm_type": "whiten",
+  "normalize_output": true,
+  "kernel": [
+    "linear",
+    "rbf"
+  ],
+  "n_inducing": null,
+  "dataset_sha256": "8127aea57f17e5da420ae90aaaf8f5ffd0a762b75fc672e29eed95df21811fd3",
+  "reuse_stage1": null
+}

@@ -1,0 +1,12 @@
+{
+  "repository": "AaltoPML/FoRDE",
+  "revision": "e8f9d7418be43064ffdc247ba7e62a61149da542",
+  "files": {
+    "train_forde.py": "06789a28896b714148689eb06c7e7b9266d2416e",
+    "optimizers.py": "6bc56bfd9d8dfb48d3595a32608b10916e9fac80",
+    "calculate_pca.py": "c50cf5096a74262ab40c9cfbd02e4fe382bfcb15",
+    "README.md": "095072de1ed132317cf8c90f882ba5e5dfdd5ec6",
+    "LICENSE": "c9efeae7ec434cc1ace9de5260d128009deee180",
+    "install_steps.txt": "3db4c07b735ba5505e27d438e01fee263a50360f"
+  }
+}

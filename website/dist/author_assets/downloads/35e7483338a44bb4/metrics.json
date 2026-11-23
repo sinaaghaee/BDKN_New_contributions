@@ -1,0 +1,14 @@
+[
+  {
+    "method": "dkl",
+    "rmse": 0.17241893008780684,
+    "nll": -0.2601223943176246,
+    "predictive_family": "gaussian",
+    "seconds": 2.1303548850119114,
+    "dataset_sha256": "f46613cdab17e5783a3a843fb1aa0036012cd8c8fafb32c93f998c9624678f82",
+    "training_seconds": 2.057623190106824,
+    "stage1_training_seconds": null,
+    "stage2_training_seconds": null,
+    "training_reused": false
+  }
+]

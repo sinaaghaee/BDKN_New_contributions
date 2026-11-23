@@ -1,0 +1,14 @@
+[
+  {
+    "method": "ldbll",
+    "rmse": 0.9932050018562332,
+    "nll": 1.409214618709885,
+    "predictive_family": "gaussian",
+    "seconds": 540.9111563777551,
+    "dataset_sha256": "a3549026187a5c094abc85846787d4454e8cf01e6120e43a57e93dfb874f93ca",
+    "training_seconds": 540.7934065139852,
+    "stage1_training_seconds": null,
+    "stage2_training_seconds": null,
+    "training_reused": false
+  }
+]

@@ -264,6 +264,7 @@ Desktop.ini
 /data/
 /results/
 /.cache/
+/.venv-forde/
 
 # Keep the complete offline report so a clone can open it directly.
 !/website/dist/

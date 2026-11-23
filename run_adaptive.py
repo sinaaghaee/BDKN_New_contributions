@@ -271,7 +271,7 @@ def execute(args, jobs, *, validator=None, marker=None, command_builder=None, re
                         if getattr(args, 'retry_memory_errors', False):
                             log_path = Path(job['folder']).parent / (job['id'] + '.log')
                             error_text = log_path.read_text(errors='replace').lower() if log_path.exists() else ''
-                            if any(term in error_text for term in ('cuda error: out of memory', 'cuda out of memory', 'cublas_status_alloc_failed', 'cudaerrormemoryallocation')):
+                            if any(term in error_text for term in ('cuda error: out of memory', 'cuda out of memory', 'cublas_status_alloc_failed', 'cudaerrormemoryallocation', 'cuda_error_out_of_memory', 'resource_exhausted: out of memory', 'resource exhausted: out of memory')):
                                 job.update(status='pending', retry_after=time.time()+60,
                                     oom_retries=job.get('oom_retries',0)+1)
                                 memory_retry_in_pass = True

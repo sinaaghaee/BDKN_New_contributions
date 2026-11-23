@@ -1,0 +1,14 @@
+[
+  {
+    "method": "gp",
+    "rmse": 0.8411084519255502,
+    "nll": 253.6793366128139,
+    "predictive_family": "gaussian",
+    "seconds": 6.860482638934627,
+    "dataset_sha256": "2bb3f97c933dbd4d7155b4574613bd9daab7cbba9ca86b8ea1893232351847a4",
+    "training_seconds": 6.837653692113236,
+    "stage1_training_seconds": null,
+    "stage2_training_seconds": null,
+    "training_reused": false
+  }
+]

@@ -1,0 +1,40 @@
+<section id="settings-comparison" aria-labelledby="settings-comparison-title">
+  <style>#settings-comparison table{min-width:900px;width:100%;border-collapse:collapse}#settings-comparison th,#settings-comparison td{white-space:normal;text-align:left;min-width:10rem;vertical-align:top;padding:9px}#settings-comparison{scroll-margin-top:16px}</style>
+  <h2 id="settings-comparison-title">Settings comparison · 1D datasets</h2>
+  <p>This table covers the ensemble methods on this 1D website. The UCI website has a separate paper-derived experiment bank; its low-LR budget is 500 epochs, whereas the 1D budget below is 2,000 epochs.</p>
+  <div style="overflow-x:auto">
+    <table aria-label="1D ensemble training settings">
+      <thead><tr><th scope="col">Setting</th><th scope="col">Original 1D · low / high</th><th scope="col">Author code · low / high</th><th scope="col">Author code · README</th><th scope="col">Author code · paper</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Implementation</th><td>Our standalone implementations</td><td>Released D’Angelo trainer; FoRDE adapter</td><td>Released D’Angelo trainer; FoRDE adapter</td><td>Released D’Angelo trainer; FoRDE adapter</td></tr>
+        <tr><th scope="row">Networks</th><td>5</td><td>5</td><td>100</td><td>50</td></tr>
+        <tr><th scope="row">Hidden layers / activation</th><td>2 × 50 / ReLU</td><td>2 × 50 / ReLU</td><td>2 × 10 / ReLU</td><td>2 × 50 / ReLU</td></tr>
+        <tr><th scope="row">Learning rate</th><td>0.001 / 0.1</td><td>0.001 / 0.1</td><td>0.01</td><td>0.01</td></tr>
+        <tr><th scope="row">Training budget</th><td>2,000 / 40 epochs</td><td>Updates matching 2,000 / 40 training passes</td><td>5,000 gradient steps</td><td>15,000 gradient steps</td></tr>
+        <tr><th scope="row">Batch size</th><td>32 per network</td><td>32</td><td>32</td><td>64</td></tr>
+        <tr><th scope="row">Optimizer</th><td>Adam</td><td>Adam</td><td>Adam</td><td>Adam</td></tr>
+        <tr><th scope="row">Inputs standardized</th><td>Yes</td><td>Yes</td><td>No</td><td>No</td></tr>
+        <tr><th scope="row">Network outputs</th><td>Mean and variance</td><td>Mean only</td><td>Mean only</td><td>Mean only</td></tr>
+        <tr><th scope="row">Likelihood variance</th><td>Learned</td><td>Fixed at 1</td><td>Fixed at 1</td><td>Fixed at 1</td></tr>
+        <tr><th scope="row">Initialization</th><td>Original framework initialization</td><td>Independent N(0,I) samples</td><td>Independent N(0,I) samples</td><td>Independent N(0,I) samples</td></tr>
+        <tr><th scope="row">First-stage prior</th><td>No explicit parameter or function prior</td><td>Weight prior; function-space prior for functional KDE-WGD</td><td>Weight prior; function-space prior for functional KDE-WGD</td><td>Weight prior; function-space prior for functional KDE-WGD</td></tr>
+        <tr><th scope="row">Repulsion inputs</th><td>Training, random, or combined; weight repulsion uses parameters</td><td>Training batches; weight repulsion uses parameters</td><td>Training batches; weight repulsion uses parameters</td><td>Training batches; weight repulsion uses parameters</td></tr>
+        <tr><th scope="row">BDKN second stage</th><td>100 updates</td><td>100 updates</td><td>100 updates</td><td>100 updates</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">Epoch = a full training pass; gradient step = one minibatch update. Targets remain the same saved data. The variance of 1 is the observation likelihood variance, not the ensemble’s total predictive variance. BDKN separately infers its second-stage uncertainty.</p>
+  <h3>Which implementation and control?</h3>
+  <div style="overflow-x:auto">
+    <table aria-label="1D repulsion implementation differences">
+      <thead><tr><th scope="col">Method</th><th scope="col">Original 1D</th><th scope="col">Author-code comparison</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Weight repulsion</th><td>Our parameter-space KDE regularizer</td><td>Released D’Angelo KDE-WGD update with a Gaussian weight prior</td></tr>
+        <tr><th scope="row">Functional repulsion</th><td>Our output-space KDE regularizer</td><td>Released functional KDE-WGD with an SSGE function-prior force</td></tr>
+        <tr><th scope="row">FoRDE</th><td>Our normalized-gradient repulsion</td><td>Released FoRDE repulsion function inside our scalar-regression adapter</td></tr>
+        <tr><th scope="row">No-repulsion baseline</th><td>Original DE</td><td>Author baseline for weight KDE-WGD; FoRDE matched control for the JAX FoRDE adapter</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note">The released D’Angelo scalar code has a network-count factor in its driving gradient; the JAX FoRDE adapter does not. Functional KDE-WGD also changes the prior representation. A comparison across these methods therefore changes more than the repulsion term. The FoRDE matched control preserves its adapter and removes only repulsion. BDKN and the FoRDE regression combination are our extensions.</p>
+</section>

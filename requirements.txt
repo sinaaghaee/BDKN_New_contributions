@@ -7,3 +7,4 @@ scikit-learn>=1.8,<1.9
 gpytorch==1.15.2
 vbll==0.4.9
 tqdm>=4.67,<5
+seaborn>=0.13,<0.14  # Imported by the pinned author regression trainer/plot utilities.

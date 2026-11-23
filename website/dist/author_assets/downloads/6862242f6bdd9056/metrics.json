@@ -1,0 +1,22 @@
+[
+  {
+    "method": "author_kde_wgd",
+    "rmse": 0.4384091029879176,
+    "nll": 1.0598021762280783,
+    "predictive_family": "gaussian",
+    "dataset_sha256": "f35b0ec77a42dac1395acfb52d563d715a4934208826cff5242ffdd5a8538195",
+    "training_seconds": 11.980572640895844,
+    "stage1_training_seconds": 11.980572640895844,
+    "stage2_training_seconds": 0.0
+  },
+  {
+    "method": "author_kde_wgd_bdkn",
+    "rmse": 0.38512486019986747,
+    "nll": 0.46386488776932205,
+    "predictive_family": "student_t",
+    "dataset_sha256": "f35b0ec77a42dac1395acfb52d563d715a4934208826cff5242ffdd5a8538195",
+    "training_seconds": 13.700181159656495,
+    "stage1_training_seconds": 11.980572640895844,
+    "stage2_training_seconds": 1.7196085187606514
+  }
+]

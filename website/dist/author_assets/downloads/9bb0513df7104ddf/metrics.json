@@ -1,0 +1,14 @@
+[
+  {
+    "method": "bdkn",
+    "rmse": 1.9937799339158793,
+    "nll": 3.4283966881805723,
+    "predictive_family": "student_t",
+    "seconds": 4.992307489272207,
+    "dataset_sha256": "a3549026187a5c094abc85846787d4454e8cf01e6120e43a57e93dfb874f93ca",
+    "training_seconds": 3.628339170012623,
+    "stage1_training_seconds": 1.7943187109194696,
+    "stage2_training_seconds": 1.8340204590931535,
+    "training_reused": false
+  }
+]

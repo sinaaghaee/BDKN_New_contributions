@@ -1,0 +1,24 @@
+{
+  "repository": "dngfra/repulsive_ensembles",
+  "revision": "6dcb4c068082d18b7e86e90f4459d63d7ba8a750",
+  "files": {
+    "models/MLP.py": "4c517254c6fe2733f89d0f3331d1a02ef75b9b67",
+    "models/ensemble.py": "3f69c79227dbde40888e4bf2ef1515ab102aeb7b",
+    "methods/WGD.py": "cd9ece84bd741d2dde14122bf21f0441ea6d71de",
+    "methods/SVGD.py": "2125f09602e093fc9ad53f6bfd324184c41bf6da",
+    "methods/f_SVGD.py": "cd11d7ddfef7ee861bd0a50a37fdb45991599f53",
+    "methods/method_utils.py": "2b5cb6071db05a2bd4b080a91e11f651a90cf072",
+    "utils/kernel.py": "18971c37eba28c6e64f8cec21c96752a1336f924",
+    "utils/SSGE_squeeze.py": "c81b3b62f5c8990dcbdac805aa80dff5c8d64a21",
+    "utils/distributions.py": "ca443b3cab18cb964020763775c0da2bf90a5bbb",
+    "utils/config.py": "dbe99b4f47c90b82a24b7d30895ff0b4ac349093",
+    "utils/utils.py": "10bce2543c4876bbc77047a1ceb6800c8bbd859d",
+    "data/dataset.py": "8a0d7a56977d684fa852fd9bfe6b19f271dea66d",
+    "data/toy_regression/generete_regression.py": "097936bc4b731061cd3ec52a85822fd7c857360e",
+    "data/toy_regression/regression1d_data.py": "bf6d2264f17f661d96a713a87b312ef9b6bac33a",
+    "training/training_1d_regre.py": "83ed3b3b4909e3ed50e68de07a76b4ff77a82a6f",
+    "experiments/exp_regr.py": "25b4c6b79ff42a8bd456160f4b5422eae344948f",
+    "README.md": "a7797f55cc7e18a0f6127b28968627ba9adbaaf8",
+    "requirements.txt": "1d8dc9973ad3f4feee45fc354f25263da09f9fb3"
+  }
+}

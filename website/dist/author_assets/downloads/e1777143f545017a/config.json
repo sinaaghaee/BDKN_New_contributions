@@ -1,0 +1,49 @@
+{
+  "seed": 123,
+  "device": "cuda:0",
+  "cpu_threads": 1,
+  "data_path": "/home/grads/s/sina.aghaee/PycharmProjects/BDKN_New_contributions/data/author-xsine.npz",
+  "output_root": "results",
+  "epochs": 2000,
+  "lr": 0.001,
+  "batch_size": 32,
+  "n_nets": 5,
+  "hidden_dim": 50,
+  "hidden_layers": 2,
+  "activation": "ReLU",
+  "norm_type": "none",
+  "jitter_eps": 1e-06,
+  "normalize_x": true,
+  "x_norm_type": "standard",
+  "normalize_y": false,
+  "learn_sigma_p2": true,
+  "Beta_var_prior": 1.0,
+  "alpha0": 0.0,
+  "beta0": 0.0,
+  "phi_add_identity": false,
+  "phi_add_bias": false,
+  "bll_dtype": "float64",
+  "stage2_steps": 100,
+  "stage2_lr": 0.1,
+  "repulsion_location": "combined",
+  "repulsion_strength": 0.01,
+  "repulsion_bandwidth_floor": 1e-06,
+  "dataset_sha256": "a3549026187a5c094abc85846787d4454e8cf01e6120e43a57e93dfb874f93ca",
+  "reuse_stage1": null,
+  "repulsion_sampling": {
+    "location": "combined",
+    "domain_raw": [
+      0.0,
+      7.0
+    ],
+    "domain_model": [
+      -2.1228139400482178,
+      2.008232355117798
+    ],
+    "random_seed": 1852,
+    "redraw": "optimizer_step",
+    "random_count": "actual_training_minibatch_size",
+    "exclude": "all_training_inputs_and_duplicates",
+    "point_count_multiplier": 2
+  }
+}

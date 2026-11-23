@@ -1,0 +1,19 @@
+{
+  "seed": 123,
+  "device": "cuda:1",
+  "cpu_threads": 1,
+  "data_path": "/home/grads/s/sina.aghaee/PycharmProjects/BDKN_New_contributions/data/forrester.npz",
+  "output_root": "results",
+  "epochs": 40,
+  "lr": 0.1,
+  "normalize_input": true,
+  "input_norm_type": "whiten",
+  "normalize_output": true,
+  "kernel": [
+    "linear",
+    "rbf"
+  ],
+  "n_inducing": null,
+  "dataset_sha256": "0f7de356b53dbd4f62eeedd3e1993865d43e5dffe5e646b6b2f7897ed3b87209",
+  "reuse_stage1": null
+}

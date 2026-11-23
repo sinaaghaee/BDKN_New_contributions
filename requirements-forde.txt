@@ -1,0 +1,16 @@
+# Isolated Python 3.10 environment for the pinned JAX author core.
+jax[cuda12]==0.4.30
+jaxlib==0.4.30
+dm-haiku==0.0.12
+numpy==1.26.4
+scipy==1.13.1
+# Constrain Haiku's Flax dependencies to the same compatible JAX generation.
+flax==0.8.4
+optax==0.2.2
+chex==0.1.86
+orbax-checkpoint==0.5.16
+# Keep the compiler/runtime within CUDA 12.6, as used by the existing GPU stack.
+nvidia-cuda-nvcc-cu12==12.6.85
+nvidia-cuda-runtime-cu12==12.6.77
+nvidia-cuda-cupti-cu12==12.6.80
+nvidia-cudnn-cu12==9.1.1.17

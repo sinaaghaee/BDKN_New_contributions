@@ -347,6 +347,9 @@ def main():
     if (ROOT/'results/forde_raw/manifest.json').exists():
         from forde_raw_report import build as build_raw
         build_raw(ROOT/'results/forde_raw',output)
+    if (ROOT/'results/author/manifest.json').exists():
+        from author_report import build as build_author
+        build_author(ROOT/'results/author',output)
     print(f'Website: {output}/index.html · {len(registry["experiments"])} experiments')
 
 

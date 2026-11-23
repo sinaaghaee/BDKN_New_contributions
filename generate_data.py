@@ -42,6 +42,7 @@ def make_dataset(config):
 # Source settings are active script configurations, not generator argument defaults.
 # Each dataset stays scalar so every existing standalone method can read it.
 DATASETS = {
+    'author-xsine': dict(label='Author x sin x', n_train=90, noise_std=.25, domain=(0.,7.), formula=r'x\sin x', source='dngfra/repulsive_ensembles: toy_reg task_set=4', sampling='45 uniform observations in each of [1.5,2.5] and [4.5,6], upstream seed 42'),
     'steps': dict(label='Smoothed steps', n_train=100, noise_std=.1, domain=(-1.,1.), formula=r'0.3[1-\sigma(200(x+0.6))]+0.9[\sigma(200(x+0.6))-\sigma(200x)]-0.6[\sigma(200x)-\sigma(200(x-0.4))]+0.01\sin(50\sin(10x))', source='arXiv:2505.18526 section 4.1', sampling='Uniform(-1, 1)'),
     'cubic': dict(label='Cubic', n_train=20, noise_std=6., domain=(-6.,6.), formula=r'x^3', source='BDKN/Clean_Code/toy_example/x^3with gp.py', sampling='2.5 * clip(Normal(0,1), -2, 2)'),
     'forrester': dict(label='Forrester', n_train=20, noise_std=.1, domain=(0.,1.), formula=r'(6x-2)^2\sin(12x-4)', source='BDKN/Clean_Code/toy_example/forrester.py', sampling='10 equally spaced inputs in each of [0.2,0.4] and [0.65,0.85]'),
@@ -59,7 +60,7 @@ def dataset_function(name, x):
     if name == 'steps': return ground_truth(x)
     if name == 'cubic': return x**3
     if name == 'forrester': return (6*x-2)**2*np.sin(12*x-4)
-    if name == 'he': return x*np.sin(x)
+    if name in ('he', 'author-xsine'): return x*np.sin(x)
     if name == 'amplitude-sine': return .5*(x+3)*np.sin(1.5*x)
     if name == 'linear-sinc': return 2*x-2*np.sinc(5*x)
     if name == 'square-wave': return sum(4*np.sin((2*k+1)*np.pi*x/2.5)/((2*k+1)*np.pi) for k in range(20))
@@ -70,6 +71,8 @@ def dataset_function(name, x):
 
 
 def make_named_dataset(name, seed=123, n_test=1000, n_grid=2000, n_train=None):
+    if name == 'author-xsine':
+        return make_author_dataset(n_test=n_test, n_grid=n_grid, n_train=n_train)
     cfg=dict(DATASETS[name], dataset=name, seed=seed, n_test=n_test, n_grid=n_grid)
     if n_train is not None: cfg['n_train']=n_train
     n=cfg['n_train']
@@ -104,6 +107,37 @@ def make_named_dataset(name, seed=123, n_test=1000, n_grid=2000, n_train=None):
     cfg['sinc_definition']='sinc(t) = sin(pi*t)/(pi*t), sinc(0) = 1'
     arrays['metadata']=np.array(json.dumps(cfg,sort_keys=True))
     return arrays
+
+
+def make_author_dataset(n_test=1000, n_grid=2000, n_train=None):
+    """Export exact upstream training/native-test arrays plus a noisy holdout.
+
+    The first 100 noisy-test coordinates equal the native grid, allowing every
+    saved model to be scored on the untouched clean author targets as well.
+    These extra evaluations never enter the author training loop or its RNG.
+    """
+    if n_train not in (None, 90) or n_test < 100 or n_grid < 2:
+        raise ValueError('Author data requires 90 train, >=100 test and >=2 grid points')
+    from author_code import original_data
+    state = np.random.get_state()
+    try:
+        upstream = original_data()
+        tx, ty = upstream.get_train_inputs(), upstream.get_train_outputs()
+        nx, ny = upstream.get_test_inputs(), upstream.get_test_outputs()
+    finally:
+        np.random.set_state(state)
+    rng = np.random.default_rng(123)
+    test = np.concatenate((nx, rng.uniform(0, 7, (n_test - 100, 1))))
+    truth = test * np.sin(test)
+    grid = np.linspace(0, 7, n_grid).reshape(-1, 1)
+    cfg = dict(DATASETS['author-xsine'], dataset='author-xsine', seed=42,
+               test_seed=123, n_test=n_test, n_grid=n_grid,
+               test_sampling='Native 100 grid inputs plus independent uniform inputs; independent noise std 0.25',
+               native_test='100 noiseless upstream linspace(0,7) targets')
+    return dict(x_train=tx, y_train=ty, f_train=tx*np.sin(tx),
+                x_test=test, y_test=truth+rng.normal(0, .25, truth.shape), f_test=truth,
+                x_grid=grid, f_grid=grid*np.sin(grid), x_native=nx, y_native=ny,
+                native_test_indices=np.arange(100), metadata=np.array(json.dumps(cfg, sort_keys=True)))
 
 
 def save_named_dataset(name, path, seed=123, **counts):
